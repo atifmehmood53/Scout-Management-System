@@ -1,0 +1,89 @@
+{% extends 'boyScouts/base.html' %} {% block mainContent %}
+{% load staticfiles %}
+<script src="{% static 'boyScouts/js/jquery.formset.js' %}"></script> 
+<div class="container">
+    <form method="POST">
+        <h3>Student Details</h3>
+        {% csrf_token %} 
+        {% for fields in admissionForm %} 
+       
+        {{ fields.label_tag}} 
+        {{fields.errors}} 
+        {{fields}} 
+       
+        {% endfor %}
+
+        
+        <h3>Rank Badges Acchieved</h3>
+        <hr>
+        <table class="table table-sm table-light">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Badge Name</th>
+                    <th scope="col">Passing Date</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for form in rankFormSet %}
+            <tr class="rank-form ">
+                {% for fields in form  %}
+                <td class=" col-6">
+                    {{fields}}
+                    <span style="color:red;">{{fields.errors}}</span>
+                </td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+            </tbody>
+            {{ rankFormSet.management_form }}
+        </table>
+
+        <h3>Proficiency Badges Earned</h3>
+        <hr>
+        <table class="table table-sm table-light">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Badge Name</th>
+                        <th scope="col">Passing Date</th>
+                        <th scope="col">Certificate #</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for form in proficiencyFormSet %}
+                <tr class="proficiency-form ">
+                    {% for fields in form  %}
+                    <td class=" col-4">
+                        {{fields}}
+                        <span style="color:red;">{{fields.errors}}</span>
+                    </td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+                </tbody>
+                {{proficiencyFormSet.management_form }}
+        </table>
+    
+
+        <button class=" mt-3 btn btn-primary btn-block"> Submit</button>
+    </form>
+</div>
+<script>
+    var incrementFormCount=function(row){
+        console.log("Ok");
+        console.log(row);
+    }
+    $(function() {
+        $('.rank-form').formset({
+            prefix: '{{ rankFormSet.prefix }}',
+            
+        });
+    })
+    
+    $(function() {
+        $('.proficiency-form').formset({
+            prefix: '{{ proficiencyFormSet.prefix }}',
+            
+        });
+    })
+
+</script> {% endblock mainContent %}

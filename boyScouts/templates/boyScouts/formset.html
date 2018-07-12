@@ -1,0 +1,36 @@
+{% extends 'boyScouts/base.html' %}
+
+{% block mainContent %}
+{% load staticfiles %}
+
+<script src="{% static 'boyScouts/js/jquery.formset.js' %}">
+
+</script> 
+
+<form id="myForm" method="post" action="">
+    {% csrf_token %}
+    <table border="0" cellpadding="0" cellspacing="0">
+      <tbody>
+      {% for form in formset%}
+        <tr>
+            <td></td>
+          <td>{{ form.rankedBadge}}</td>
+          <td>{{ form.dateOfPassing }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    {{ formset.management_form }}
+    <button>Submit</button>
+  </form>
+
+
+
+  <script type="text/javascript">
+    $(function() {
+      $('#myForm tbody tr').formset({
+        prefix: '{{ formset.prefix }}'
+      });
+    })
+  </script>
+{% endblock mainContent %}

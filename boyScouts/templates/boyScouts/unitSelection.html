@@ -1,0 +1,32 @@
+{% extends 'boyScouts/base.html' %}
+
+
+{% block mainContent %}
+
+<div class="container">
+    <br>
+    <br>
+    <h1 class="text-center text-success">
+        User Name: {{groupObject.user.username}}
+    </h1>
+    <h1 class="text-center text-success">
+        User Group: {{groupObject.group.name}}
+    </h1>
+    <h1 class="text-center text-success">
+        Please Select An Option.
+    </h1>
+    <br>
+    <br>
+<div class="row">
+  <a class="btn btn-primary btn-block" href="{% url 'admissionForm'%}">Add Scouts</a>
+  <a class="btn btn-primary btn-block" href="{% url 'scoutList'  %}" >View Scouts</a>
+
+  
+</div>
+  
+
+
+</div>
+
+{% endblock mainContent %}
+    

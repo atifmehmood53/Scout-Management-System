@@ -1,0 +1,25 @@
+{% extends "boyScouts/base.html" %} {% block mainContent %}
+<div class="container">
+    <h4 class="text-center text-danger ">
+        All scouts that have same Group as Loggedin User
+    </h4>
+    <div class="row">
+            <div class="col-6 font-weight-bold text-white bg-dark">
+                    Name
+            </div>
+            <div class="col-6 font-weight-bold text-white bg-dark">
+                    Group
+            </div>
+        {% for scout in scoutList %}
+        <div class="col-6">
+            <a href= "{% url 'scoutDetails' scout.id %}">{{scout.name}}</a>
+        </div>
+        <div class="col-6">
+            {{scout.group}}
+        </div>
+        {% endfor %}
+
+    </div>
+
+</div>
+{% endblock mainContent %}
