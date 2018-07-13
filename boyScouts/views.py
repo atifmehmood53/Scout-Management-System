@@ -87,6 +87,7 @@ def scoutDetails(request,id):
 
 def admission(request):
     userGroup = getUserGroup(request.user)# get user group 
+    print("\nUser Group: ",userGroup.group)
     if userGroup == None:
         return HttpResponse("You Don't have any assigned group, please contact your admin.")
 
@@ -101,7 +102,7 @@ def admission(request):
         print('\n')
         # admissionForm
         postData = request.POST.copy()#making copy to add group details in it
-        postData['group']= userGroup.id
+        postData['group']= userGroup.group.id
         admissionForm = forms.Scout_Form(postData)
 
         print(admissionForm.data)
@@ -132,7 +133,7 @@ def admission(request):
         else:
             admissionForm.fields['group'].disabled = True
             return render(request,'boyScouts/admissionForm.html',context={'sections':getSections(),'admissionForm':admissionForm,'rankFormSet':rankFormSet,'proficiencyFormSet':proficiencyFormSet})
-    admissionForm = forms.Scout_Form(initial={'group':userGroup})
+    admissionForm = forms.Scout_Form(initial={'group':userGroup.group.id})
     admissionForm.fields['group'].disabled = True
     rankFormSet = rankFormSet(prefix="rank") 
     proficiencyFormSet = proficiencyFormSet(prefix="proficiency")
