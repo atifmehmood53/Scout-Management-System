@@ -1,5 +1,11 @@
-{% extends 'boyScouts/base.html' %} {% block mainContent %}
+{% extends 'boyScouts/blank.html' %} {% block mainContent %}
 {% load staticfiles %}
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a href="index.html">Dashboard</a>
+    </li>
+    <li class="breadcrumb-item active">Admission Form</li>
+  </ol>
 <script src="{% static 'boyScouts/js/jquery.formset.js' %}"></script> 
 <div class="container">
     <form method="POST">
@@ -86,4 +92,5 @@
         });
     })
 
-</script> {% endblock mainContent %}
+</script> 
+{% endblock mainContent %}

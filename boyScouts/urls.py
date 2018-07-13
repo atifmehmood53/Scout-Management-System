@@ -20,7 +20,7 @@ from . import views
 urlpatterns = [
     path('login',views.loginView,name='loginView'),
     path('unit-selection',views.unitSelection,name='unitSelection'),
-    path('scoutList',views.scoutsList,name='scoutList'),
+    path('scoutList/<int:id>',views.scoutsList,name='scoutList'),
     path('scoutDetails/<int:id>',views.scoutDetails,name='scoutDetails'),
     path('admission',views.admission,name='admissionForm'),
     

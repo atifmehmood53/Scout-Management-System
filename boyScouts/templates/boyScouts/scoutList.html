@@ -1,25 +1,48 @@
-{% extends "boyScouts/base.html" %} {% block mainContent %}
-<div class="container">
-    <h4 class="text-center text-danger ">
-        All scouts that have same Group as Loggedin User
-    </h4>
-    <div class="row">
-            <div class="col-6 font-weight-bold text-white bg-dark">
-                    Name
-            </div>
-            <div class="col-6 font-weight-bold text-white bg-dark">
-                    Group
-            </div>
-        {% for scout in scoutList %}
-        <div class="col-6">
-            <a href= "{% url 'scoutDetails' scout.id %}">{{scout.name}}</a>
-        </div>
-        <div class="col-6">
-            {{scout.group}}
-        </div>
-        {% endfor %}
+{% extends "boyScouts/blank.html" %} 
+{% block mainContent %}
+<ol class="breadcrumb">
+        <li class=" breadcrumb-item">
+                Showing <span class=" font-weight-bold text-primary">{{scoutList|length }} {{category}} </span> Scouts
+        </li>
 
+</ol>
+
+
+
+<div class="row">
+        {% for scout in scoutList %}
+        
+    <div class="col-xl-3 col-sm-6 mb-3">
+        <div class="card text-white bg-dark o-hidden h-100">
+            <div class="card-body">
+                <div class="card-body-icon">
+                    <i class="fa fa-fw fa-user"></i>
+                </div>
+                <div class="mr-5">{{scout.name}}</div>
+            </div>
+            <div class="card-footer text-white clearfix small z-1" >
+                    <span class="float-left">Group: </span>
+                    <span class="float-right">{{scout.group}}</span>
+                </div>
+                <div class="card-footer text-white clearfix small z-1" >
+                        <span class="float-left">Rank Badges</span>
+                        <span class="float-right">{{scout.number_of_rank}}</span>
+                    </div>
+                    <div class="card-footer text-white clearfix small z-1" >
+                            <span class="float-left">Proficiency Badges</span>
+                            <span class="float-right">{{scout.number_of_proficiency}}</span>
+                        </div>
+            <a class="card-footer text-white clearfix small z-1" href="{% url 'scoutDetails' scout.id %}">
+                <span class="float-left">View Details</span>
+                <span class="float-right">
+                    <i class="fa fa-angle-right"></i>
+                </span>
+            </a>
+           
+        </div>
     </div>
+    {% endfor %}
 
 </div>
+
 {% endblock mainContent %}

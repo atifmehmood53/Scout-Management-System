@@ -3,6 +3,7 @@ from django.shortcuts import HttpResponse , reverse , redirect, get_object_or_40
 from django.forms import formset_factory
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.db.models import Count
 from . import models
 
 from . import forms
@@ -14,7 +15,8 @@ def getUserGroup(user):
         return models.Group_User.objects.get(user=user)
     except models.Group_User.DoesNotExist:
         return None
-
+def getSections():
+    return models.Section.objects.all()
 
 
 
@@ -49,17 +51,18 @@ def unitSelection(request):
     if userGroup == None:
         return HttpResponse("You Don't have any assigned group, please contact your admin.")
 
-    return  render(request,'boyScouts/unitSelection.html', context={'groupObject':userGroup})
+    return  render(request,'boyScouts/profile.html', context={'groupObject':userGroup,'sections':getSections()})
 
 
-def scoutsList(request):
+def scoutsList(request,id):
     userGroup = getUserGroup(request.user)# get user group 
     if userGroup == None:
         return HttpResponse("You Don't have any assigned group, please contact your admin.")
     
 
-    scouts = models.Scout.objects.all().filter(group= userGroup.group )
-    return  render(request,'boyScouts/scoutList.html', context={'scoutList':scouts})
+    scouts = models.Scout.objects.all().filter(group= userGroup.group,section_id = id ).annotate(number_of_rank=Count('scout_ranked_badge'),number_of_proficiency=Count('scout_proficiency_badge'))
+    
+    return  render(request,'boyScouts/scoutList.html', context={'scoutList':scouts,'sections':getSections(),'category':models.Section.objects.get(id = id)})
 
 
 
@@ -77,7 +80,7 @@ def scoutDetails(request,id):
     rankFormSet = rankFormSet(prefix="rank") 
     proficiencyFormSet = proficiencyFormSet(prefix="proficiency")
     
-    return  render(request,'boyScouts/scoutDetails.html',context={'admissionForm':admissionForm,'rankFormSet':rankFormSet,'proficiencyFormSet':proficiencyFormSet})
+    return  render(request,'boyScouts/scoutDetails.html',context={'sections':getSections(),'admissionForm':admissionForm,'rankFormSet':rankFormSet,'proficiencyFormSet':proficiencyFormSet})
     
 
 
@@ -128,13 +131,13 @@ def admission(request):
 
         else:
             admissionForm.fields['group'].disabled = True
-            return render(request,'boyScouts/admissionForm.html',context={'admissionForm':admissionForm,'rankFormSet':rankFormSet,'proficiencyFormSet':proficiencyFormSet})
+            return render(request,'boyScouts/admissionForm.html',context={'sections':getSections(),'admissionForm':admissionForm,'rankFormSet':rankFormSet,'proficiencyFormSet':proficiencyFormSet})
     admissionForm = forms.Scout_Form(initial={'group':userGroup})
     admissionForm.fields['group'].disabled = True
     rankFormSet = rankFormSet(prefix="rank") 
     proficiencyFormSet = proficiencyFormSet(prefix="proficiency")
     
-    return  render(request,'boyScouts/admissionForm.html',context={'admissionForm':admissionForm,'rankFormSet':rankFormSet,'proficiencyFormSet':proficiencyFormSet})
+    return  render(request,'boyScouts/admissionForm.html',context={'sections':getSections(),'admissionForm':admissionForm,'rankFormSet':rankFormSet,'proficiencyFormSet':proficiencyFormSet})
     
 
 def formset(request):
@@ -149,3 +152,9 @@ def formset(request):
 
     formset = formset_factory(forms.Scout_Ranked_Badge_Form,extra=3)
     return render(request,'boyScouts/formset.html',context={'formset':formset})
+
+
+
+
+
+
