@@ -90,8 +90,8 @@ def admission(request):
     print("\nUser Group: ",userGroup.group)
     if userGroup == None:
         return HttpResponse("You Don't have any assigned group, please contact your admin.")
-
-    rankFormSet = formset_factory(forms.Scout_Ranked_Badge_Form)
+    
+    rankFormSet = formset_factory(forms.Scout_Ranked_Badge_Form,)
     proficiencyFormSet = formset_factory(forms.Scout_Proficiency_Badge_Form)
 
 

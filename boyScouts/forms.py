@@ -28,22 +28,29 @@ class Scout_Form(forms.ModelForm):
         widgets ={
             'group':forms.Select({'class' : 'form-control field ',}),
             'section':forms.Select({'class' : 'form-control field ',}),
-            'name' : forms.TextInput({'class' : 'form-control field ','placeholder':'Scout Name'}),
-            'dateOfBirth' :  forms.DateInput({'class' : 'form-control field ','placeholder':'yyyy-mm-dd'}),
-            'dateOfJoining' :  forms.DateInput({'class' : 'form-control field ','placeholder':'yyyy-mm-dd'}),
+            'name' : forms.TextInput({'class' : 'form-control field ','placeholder':'Scout Name',}),
+            'dateOfBirth' :  forms.DateInput({'class' : 'form-control field date','placeholder':'yyyy-mm-dd','data-toggle':"datepicker"}),
+            'dateOfJoining' :  forms.DateInput({'class' : 'form-control field date','placeholder':'yyyy-mm-dd','data-toggle':"datepicker"}),
             'highestScoutingQualification' : forms.TextInput({'class' : 'form-control field ','placeholder':'Qualification'}),
             
         }
 
-
-
 class Scout_Ranked_Badge_Form(forms.Form):
-    badge = forms.ModelChoiceField(models.Badge.objects.all(),to_field_name="name",widget=forms.Select({'class' : 'form-control field ',}))
-    dateOfPassing = forms.DateField(widget= forms.DateInput({'class' : 'form-control field ','placeholder':'yyyy-mm-dd'}),required=True)
+    
+    #have to work on section
+    badge = forms.ModelChoiceField(models.Badge.objects.filter(category__name ='Rank Badge'),to_field_name="name",widget=forms.Select({'class' : 'form-control field ',}))
+    dateOfPassing= forms.DateField(widget= forms.DateInput({'class' : 'form-control field date','placeholder':'yyyy-mm-dd'}),required=True)
+
+
+    
+
+
+    
+
 
 class Scout_Proficiency_Badge_Form(forms.Form):
-    badge = forms.ModelChoiceField(models.Badge.objects.all(),widget=forms.Select({'class' : 'form-control field ',}))
-    dateOfPassing = forms.DateField(widget= forms.DateInput({'class' : 'form-control field ','placeholder':'yyyy-mm-dd'}),)
+    badge = forms.ModelChoiceField(models.Badge.objects.filter(category__name ='Proficiency Badge'),widget=forms.Select({'class' : 'form-control field ',}))
+    dateOfPassing = forms.DateField(widget= forms.DateInput({'class' : 'form-control field date','placeholder':'yyyy-mm-dd'}),)
     certificateNo =  forms.CharField(max_length=4,widget= forms.TextInput({'class' : 'form-control field ','placeholder':'Certificate #'}),required=True)
 
 

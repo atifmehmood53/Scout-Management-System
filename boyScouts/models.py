@@ -61,8 +61,10 @@ class Badge_Category(models.Model):
 class Badge(models.Model):
     name = models.CharField(max_length= 100)
     category = models.ForeignKey(Badge_Category,on_delete=models.CASCADE)
+    section = models.ForeignKey(Section,on_delete=models.CASCADE)
+    
     def __str__(self):
-        return self.name
+        return self.section.name+" | "+self.name 
 
 class Scout(models.Model):
     group = models.ForeignKey(Group,on_delete=models.CASCADE) 
