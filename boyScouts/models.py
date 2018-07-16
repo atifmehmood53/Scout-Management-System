@@ -47,7 +47,7 @@ class Section(models.Model):
 class Group_User(models.Model):
     group = models.ForeignKey(Group,on_delete=models.CASCADE)
     user = models.OneToOneField(djangoModels.User,on_delete=models.CASCADE)
-    section = models.OneToOneField(Section,on_delete=models.CASCADE)
+    #section = models.OneToOneField(Section,on_delete=models.CASCADE)
 
 
 
