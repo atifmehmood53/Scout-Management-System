@@ -19,6 +19,11 @@ def getSections():
     return models.Section.objects.all()
 
 
+def filterBadgeToUser(userGroup, badgeFormset):
+    for i in badgeFormset.forms:
+        q = i.fields['badge'].queryset
+        i.fields['badge'].queryset = q.filter(section = userGroup.section)
+    
 
 # Create your views here.
 
@@ -70,17 +75,19 @@ def scoutDetails(request,id):
     userGroup = getUserGroup(request.user)# get user group 
     if userGroup == None:
         return HttpResponse("You Don't have any assigned group, please contact your admin.")
-
     rankFormSet = formset_factory(forms.Scout_Ranked_Badge_Form)
     proficiencyFormSet = formset_factory(forms.Scout_Proficiency_Badge_Form)
-
-    admissionForm = forms.Scout_Form(instance=models.Scout.objects.get(id=id))
+    instance=models.Scout.objects.get(id=id)
+    proficiencyBadges = models.Scout_Proficiency_Badge.objects.filter(scout = instance)
+    rankedBadges = models.Scout_Ranked_Badge.objects.filter(scout = instance)
+    """
     for field in admissionForm.fields:
         admissionForm.fields[field].disabled = True
+    """
     rankFormSet = rankFormSet(prefix="rank") 
     proficiencyFormSet = proficiencyFormSet(prefix="proficiency")
     
-    return  render(request,'boyScouts/scoutDetails.html',context={'sections':getSections(),'admissionForm':admissionForm,'rankFormSet':rankFormSet,'proficiencyFormSet':proficiencyFormSet})
+    return  render(request,'boyScouts/scoutDetails.html',context={'sections':getSections(),'instance':instance,'rankFormSet':rankFormSet,'proficiencyFormSet':proficiencyFormSet,'proficiencyBadges':proficiencyBadges,'rankedBadges':rankedBadges})
     
 
 
@@ -103,13 +110,19 @@ def admission(request):
         # admissionForm
         postData = request.POST.copy()#making copy to add group details in it
         postData['group']= userGroup.group.id
-        admissionForm = forms.Scout_Form(postData)
+        postData['section']= userGroup.section.id
+        admissionForm = forms.Scout_Form(postData,initial={'group':userGroup.group.id,'section':userGroup.section.id})
 
         print(admissionForm.data)
         # rankFormSet
         rankFormSet = rankFormSet(request.POST,prefix="rank")
         # proficiency Form
         proficiencyFormSet = proficiencyFormSet(request.POST,prefix="proficiency")
+        #filters bages according to user's section
+        #filterBadgeToUser(user,BadgeFormset)
+        filterBadgeToUser(userGroup, rankFormSet)
+        filterBadgeToUser(userGroup, proficiencyFormSet)
+        
 
         if admissionForm.is_valid() and rankFormSet.is_valid() and proficiencyFormSet.is_valid():
             print("AdmissionForm is valid!")
@@ -132,12 +145,23 @@ def admission(request):
 
         else:
             admissionForm.fields['group'].disabled = True
+            admissionForm.fields['section'].disabled = True
+            print(admissionForm.data)
             return render(request,'boyScouts/admissionForm.html',context={'sections':getSections(),'admissionForm':admissionForm,'rankFormSet':rankFormSet,'proficiencyFormSet':proficiencyFormSet})
-    admissionForm = forms.Scout_Form(initial={'group':userGroup.group.id})
+    admissionForm = forms.Scout_Form(initial={'group':userGroup.group.id,'section':userGroup.section.id})
     admissionForm.fields['group'].disabled = True
+    admissionForm.fields['section'].disabled = True
+    
     rankFormSet = rankFormSet(prefix="rank") 
     proficiencyFormSet = proficiencyFormSet(prefix="proficiency")
-    
+    #filters bages according to user's section
+    #filterBadgeToUser(user,BadgeFormset)
+    filterBadgeToUser(userGroup, rankFormSet)
+    filterBadgeToUser(userGroup, proficiencyFormSet)
+    print(admissionForm.fields['section'])
+    """
+    Alizar phir 3 options q rakhwaey jab user ko uska section deyna tha
+    """
     return  render(request,'boyScouts/admissionForm.html',context={'sections':getSections(),'admissionForm':admissionForm,'rankFormSet':rankFormSet,'proficiencyFormSet':proficiencyFormSet})
     
 

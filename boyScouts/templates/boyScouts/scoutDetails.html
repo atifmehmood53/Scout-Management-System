@@ -1,90 +1,132 @@
-{% extends 'boyScouts/blank.html' %} {% block mainContent %}
-{% load staticfiles %}
-<script src="{% static 'boyScouts/js/jquery.formset.js' %}"></script> 
+{% extends 'boyScouts/blank.html' %} {% block mainContent %} {% load staticfiles %}
+<script src="{% static 'boyScouts/js/jquery.formset.js' %}"></script>
 
 <div class="container">
     <form method="POST">
-        <h3>Student Details</h3>
-        {% csrf_token %} 
-        {% for fields in admissionForm %} 
-       
-        {{ fields.label_tag}} 
-        {{fields.errors}} 
-        {{fields}} 
-       
-        {% endfor %}
+        {% csrf_token %}
+        <div class="card">
+            <div class=" card-header">
+                <h3>Student Details</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="text-center col-sm-12 col-md-6">
+                        {% if instance.image %}
+                        <img class="text-center img-fluid" src="{{instance.image.url}}" alt="" style="border-radius:100%; " width="50%"> {% else %}
+                        <i class=" fa fa-5x  fa-user-circle" style="font-size:10rem"></i>
+                        {% endif %}
+                    </div>
+                    <div class="col-sm-12 col-md-6">
+                        <h4>Name: {{instance.name}}</h4>
+                        <h4></h4>
+                        <hr>
+                        <h4>Date of Birth:</h4>
+                        <h4>{{instance.dateOfBirth}}</h4>
+                        <hr>
+                        <h4>Joining Date:</h4>
+                        <h4>{{instance.dateOfJoining}}</h4>
+                        <hr>
+                        <h4>Education:</h4>
+                        <h4>{{instance.highestScoutEducation}}</h4>
+                    </div>
+                </div>
 
-        
-        <h3>Rank Badges Acchieved</h3>
-        <hr>
-        <table class="table table-sm table-light">
-            <thead class="thead-dark">
-                <tr>
-                    <th scope="col">Badge Name</th>
-                    <th scope="col">Passing Date</th>
-                </tr>
-            </thead>
-            <tbody>
-            {% for form in rankFormSet %}
-            <tr class="rank-form ">
-                {% for fields in form  %}
-                <td class=" col-6">
-                    {{fields}}
-                    <span style="color:red;">{{fields.errors}}</span>
-                </td>
-                {% endfor %}
-            </tr>
-            {% endfor %}
-            </tbody>
-            {{ rankFormSet.management_form }}
-        </table>
+            </div>
 
-        <h3>Proficiency Badges Earned</h3>
-        <hr>
-        <table class="table table-sm table-light">
-                <thead class="thead-dark">
-                    <tr>
-                        <th scope="col">Badge Name</th>
-                        <th scope="col">Passing Date</th>
-                        <th scope="col">Certificate #</th>
-                    </tr>
-                </thead>
-                <tbody>
-                {% for form in proficiencyFormSet %}
-                <tr class="proficiency-form ">
-                    {% for fields in form  %}
-                    <td class=" col-4">
-                        {{fields}}
-                        <span style="color:red;">{{fields.errors}}</span>
-                    </td>
-                    {% endfor %}
-                </tr>
-                {% endfor %}
-                </tbody>
-                {{proficiencyFormSet.management_form }}
-        </table>
-    
 
-        
+        </div>
+        <div class="card mb-3 mt-3">
+            <div class=" card-header">
+                <h3>Rank Badges Earned</h3>
+            </div>
+            <div class="card-body">
+                <table class="table table-sm table-light">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Badge Name</th>
+                            <th scope="col">Passing Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for badge in rankedBadges %}
+                        <td class="lead col-4">{{badge.badge.name}}</td>
+                        <td class="lead col-4"> {{badge.dateOfPassing}}</td>
+
+                        {% endfor %} {% for form in rankFormSet %}
+                        <tr class="rank-form ">
+
+                            {% for fields in form %}
+                            <td class=" col-6">
+                                {{fields}}
+                                <span style="color:red;">{{fields.errors}}</span>
+                            </td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    {{ rankFormSet.management_form }}
+                </table>
+            </div>
+            <div class="card">
+                    <div class="card-header">
+                            <h3>Proficiency Badges Earned</h3>
+                        </div>
+                <div class="card-body">
+
+                    <hr>
+                    <table class="table table-sm table-light">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">Badge Name</th>
+                                <th scope="col">Passing Date</th>
+                                <th scope="col">Certificate #</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for badge in proficiencyBadges %}
+                            <td class="lead col-4">{{badge.badge.name}}</td>
+                            <td class="lead col-4"> {{badge.dateOfPassing}}</td>
+                            <td class="lead col-4"> {{badge.certificateNo}}</td>
+
+                            {% endfor %} {% for form in proficiencyFormSet %}
+                            <tr class="proficiency-form ">
+                                {% for fields in form %}
+                                <td class=" col-4">
+                                    {{fields}}
+                                    <span style="color:red;">{{fields.errors}}</span>
+                                </td>
+                                {% endfor %}
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                        {{proficiencyFormSet.management_form }}
+                    </table>
+                </div>
+                <div class=" card-footer">
+                    <button class="btn  btn-primary float-right" disabled>Update</button>
+                </div>
+
+            </div>
+
     </form>
-</div>
-<script>
-    var incrementFormCount=function(row){
-        console.log("Ok");
-        console.log(row);
-    }
-    $(function() {
-        $('.rank-form').formset({
-            prefix: '{{ rankFormSet.prefix }}',
-            
-        });
-    })
-    
-    $(function() {
-        $('.proficiency-form').formset({
-            prefix: '{{ proficiencyFormSet.prefix }}',
-            
-        });
-    })
+    </div>
+    <script>
+        var incrementFormCount = function (row) {
+            console.log("Ok");
+            console.log(row);
+        }
+        $(function () {
+            $('.rank-form').formset({
+                prefix: '{{ rankFormSet.prefix }}',
 
-</script> {% endblock mainContent %}
+            });
+        })
+
+        $(function () {
+            $('.proficiency-form').formset({
+                prefix: '{{ proficiencyFormSet.prefix }}',
+
+            });
+        })
+
+    </script> {% endblock mainContent %}

@@ -32,20 +32,13 @@ class Scout_Form(forms.ModelForm):
             'dateOfBirth' :  forms.DateInput({'class' : 'form-control field date','placeholder':'yyyy-mm-dd','data-toggle':"datepicker"}),
             'dateOfJoining' :  forms.DateInput({'class' : 'form-control field date','placeholder':'yyyy-mm-dd','data-toggle':"datepicker"}),
             'highestScoutingQualification' : forms.TextInput({'class' : 'form-control field ','placeholder':'Qualification'}),
-            
+            'image' : forms.FileInput({'class' : 'form-control field ',}),
         }
 
 class Scout_Ranked_Badge_Form(forms.Form):
-    
     #have to work on section
-    badge = forms.ModelChoiceField(models.Badge.objects.filter(category__name ='Rank Badge'),to_field_name="name",widget=forms.Select({'class' : 'form-control field ',}))
+    badge = forms.ModelChoiceField(models.Badge.objects.filter(category__name ='Rank Badge',),to_field_name="name",widget=forms.Select({'class' : 'form-control field ',}))
     dateOfPassing= forms.DateField(widget= forms.DateInput({'class' : 'form-control field date','placeholder':'yyyy-mm-dd'}),required=True)
-
-
-    
-
-
-    
 
 
 class Scout_Proficiency_Badge_Form(forms.Form):

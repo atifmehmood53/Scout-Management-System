@@ -37,19 +37,20 @@ class Group(models.Model):
         return self.name
 
 
-
-class Group_User(models.Model):
-    group = models.ForeignKey(Group,on_delete=models.CASCADE)
-    user = models.OneToOneField(djangoModels.User,on_delete=models.CASCADE)
-
-
-
-
 class Section(models.Model):
     name = models.CharField(max_length=30)
 
     def __str__(self):
         return self.name
+
+
+class Group_User(models.Model):
+    group = models.ForeignKey(Group,on_delete=models.CASCADE)
+    user = models.OneToOneField(djangoModels.User,on_delete=models.CASCADE)
+    section = models.OneToOneField(Section,on_delete=models.CASCADE)
+
+
+
 
 class Badge_Category(models.Model):
     name = models.CharField(max_length= 100)
@@ -73,7 +74,7 @@ class Scout(models.Model):
     dateOfBirth = models.DateField(verbose_name="Date Of Birth")
     dateOfJoining = models.DateField(verbose_name="Joining Date")
     highestScoutingQualification = models.CharField(max_length=50,verbose_name="Highest Scout Qualification")
-    
+    image = models.ImageField(blank=True, null=True)
     def __str__(self):
         return self.name
 
@@ -82,8 +83,13 @@ class Scout(models.Model):
 
 class Scout_Ranked_Badge(models.Model):
     scout = models.ForeignKey(Scout,on_delete = models.CASCADE)
-    badge = models.ForeignKey(Badge, on_delete=models.CASCADE)
+    badge = models.ForeignKey(Badge, on_delete = models.CASCADE)
     dateOfPassing = models.DateField()
+
+
+
+    def __str__(self):
+        return self.scout.name +" | "+self.badge.__str__()
     
 
 
@@ -93,3 +99,5 @@ class Scout_Proficiency_Badge(models.Model):
     dateOfPassing = models.DateField()
     certificateNo = models.CharField(max_length=4)
     
+    def __str__(self):
+        return self.scout.name +" | "+self.badge.__str__()
