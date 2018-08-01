@@ -1,9 +1,11 @@
+
+
 from django.shortcuts import render
 from django.shortcuts import HttpResponse , reverse , redirect, get_object_or_404
 from django.forms import formset_factory, inlineformset_factory
 from django.contrib.auth import authenticate, login, logout 
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.decorators import login_required
+
 from django.db.models import Count
 from boyScouts import models
 
@@ -15,7 +17,7 @@ from boyScouts.helpers import  *
         
 
 
-
+@login_required(login_url='/login')
 def profile(request):
     if request.user.is_superuser:
         return  render(request,'AdminApp/profile.html', context={'sections':getSections('superuser')})
@@ -24,6 +26,7 @@ def profile(request):
 
 
 
+@login_required(login_url='/login')
 def scoutsList(request,id):
     if not request.user.is_superuser :
         return HttpResponse("You Don't have any assigned group, please contact your admin.")
@@ -35,6 +38,7 @@ def scoutsList(request,id):
 
 
 
+@login_required(login_url='/login')
 def scoutDetails(request,id):
     
     instance = models.Scout.objects.get(id=id)
@@ -59,6 +63,7 @@ def scoutDetails(request,id):
 
 
 
+@login_required(login_url='/login')
 def admission(request):
     
     if not request.user.is_superuser :
@@ -77,7 +82,9 @@ def admission(request):
             #return render(request,'AdminApp/admissionForm.html',context={'sections':getSections('superuser'),'admissionForm':admissionForm})
 
     return  render(request,'AdminApp/admissionForm.html',context={'sections':getSections('superuser'),'admissionForm':admissionForm})
-    
+
+
+@login_required(login_url='/login')
 def editScoutBadges(request,id):
     
     instance = models.Scout.objects.get(id=id)
@@ -103,6 +110,7 @@ def editScoutBadges(request,id):
     return render(request,'AdminApp/editBadges.html',context=context)
     
 
+@login_required(login_url='/login')
 def addBadges(request):
     if not request.user.is_superuser :
         return HttpResponse("You Don't have any assigned group, please contact your admin.")
@@ -121,6 +129,7 @@ def addBadges(request):
     return render(request,'AdminApp/badgeForm.html',context=context)
 
 
+@login_required(login_url='/login')
 def displayBadges(request,category,section_id):
     if not request.user.is_superuser :
         return HttpResponse("You Don't have any assigned group, please contact your admin.")

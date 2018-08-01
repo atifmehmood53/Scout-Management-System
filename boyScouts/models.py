@@ -83,4 +83,3 @@ class Scout_Proficiency_Badge(models.Model):
     is_approved = models.BooleanField(default=False)
     def __str__(self):
         return self.scout.name + ' | '+self.badge.section.name + ' | '+ self.badge.name 
-

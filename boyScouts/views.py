@@ -39,6 +39,7 @@ def logoutView(request):
 
 
 
+@login_required(login_url='/login')
 def profile(request):
     #profile
     userGroup = getUserGroup(request.user)# get user group 
@@ -47,6 +48,7 @@ def profile(request):
     return  render(request,'boyScouts/profile.html', context={'groupObject':userGroup,'sections':getSections(userGroup)})
 
 
+@login_required(login_url='/login')
 def scoutsList(request,id):
     userGroup = getUserGroup(request.user)# get user group 
     if  userGroup==None :
@@ -59,6 +61,7 @@ def scoutsList(request,id):
 
 
 
+@login_required(login_url='/login')
 def scoutDetails(request,id):
     userGroup = getUserGroup(request.user)
     instance = models.Scout.objects.get(id=id)
@@ -76,6 +79,7 @@ def scoutDetails(request,id):
 
 
 
+@login_required(login_url='/login')
 def admission(request):
     userGroup = getUserGroup(request.user)# get user group 
     admissionForm = forms.Scout_Form(userGroup)
@@ -95,7 +99,9 @@ def admission(request):
     
     
     return  render(request,'boyScouts/admissionForm.html',context={'sections':getSections(userGroup),'admissionForm':admissionForm})
-    
+
+
+@login_required(login_url='/login')
 def editScoutBadges(request,id):
     userGroup = getUserGroup(request.user)
     instance = models.Scout.objects.get(id=id)
@@ -140,6 +146,7 @@ def editScoutBadges(request,id):
 
 
 
+@login_required(login_url='/login')
 def formset(request):
     if request.method == 'POST':
         print(request.POST)
