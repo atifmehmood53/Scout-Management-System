@@ -1,0 +1,61 @@
+{% extends 'AdminApp/blank.html' %} {% block mainContent %}
+
+
+
+
+
+
+<div class="container">
+        <div class="card">
+                <div class="card-header">
+                        <h4 class="">
+                                {{request.user.username}}
+                        </h4>
+                </div>
+                <div class="card-body">
+                        <div class="row ">
+                                {% load staticfiles %}
+                                <div class="col-sm-12 col-md-6 img-fluid text-center">
+                                        <img alt="User Pic" class="img-fluid" style="border-radius:100%" src="{% static 'boyScouts/img/alizar.jpg' %}">
+                                </div>
+                                <div class="col-sm-12 col-md-6">
+                                        <table class="table font-weight-bold table-user-information">
+                                                <tbody>
+                                                        <tr>
+                                                                <td>First Name:</td>
+                                                                <td>{{request.user.first_name}}</td>
+                                                        </tr>
+
+                                                        <tr>
+                                                                <td>Last Name:</td>
+                                                                <td>{{request.user.last_name}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                                <td>Group:</td>
+
+                                                                <td>Super User</td>
+
+                                                        </tr>
+
+                                                        <tr>
+                                                                <td>Email:</td>
+                                                                <td>{{request.user.email}}</td>
+                                                        </tr>
+
+
+                                                </tbody>
+                                        </table>
+
+                                </div>
+                        </div>
+                </div>
+
+        </div>
+</div>
+
+
+
+
+
+
+{% endblock %}

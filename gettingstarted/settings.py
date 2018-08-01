@@ -36,7 +36,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-	'boyScouts',
+    'boyScouts',
+    'AdminApp',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

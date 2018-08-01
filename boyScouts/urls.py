@@ -16,13 +16,18 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path , include
 from . import views 
+app_name = 'boyScouts'
+
+
+
 
 urlpatterns = [
     path('login',views.loginView,name='loginView'),
-    path('unit-selection',views.unitSelection,name='unitSelection'),
+    path('logout',views.logoutView,name='logoutView'),
+    path('profile',views.profile,name='profile'),
     path('scoutList/<int:id>',views.scoutsList,name='scoutList'),
     path('scoutDetails/<int:id>',views.scoutDetails,name='scoutDetails'),
+    path('scoutBadges/<int:id>',views.editScoutBadges,name='editScoutBadges'),
     path('admission',views.admission,name='admissionForm'),
-    
     path('formset',views.formset),
 ]

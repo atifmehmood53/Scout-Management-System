@@ -17,6 +17,7 @@
   <!-- Custom styles for this template-->
   <link href="{% static 'boyScouts/css/sb-admin.css' %}" rel="stylesheet">
   <script src="{% static 'boyScouts/vendor/jquery/jquery.min.js' %}"></script>
+  <link href="{% static 'boyScouts/css/styles.css' %}" rel="stylesheet">
 </head>
 
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
@@ -29,13 +30,13 @@
     <div class="collapse navbar-collapse" id="navbarResponsive">
       <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
         <li class="nav-item" data-toggle="tooltip" data-placement="right" >
-          <a class="nav-link" href= {% url 'unitSelection' %} >
+          <a class="nav-link" href= {% url 'boyScouts:profile' %} >
             <i class="fa fa-fw fa-user-circle-o"></i>
             <span class="nav-link-text">Profile</span>
           </a>
         </li>
         <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Tables">
-          <a class="nav-link" href= {% url 'admissionForm' %}>
+          <a class="nav-link" href= {% url 'boyScouts:admissionForm' %}>
             <i class="fa fa-fw fa-user-plus"></i>
             <span class="nav-link-text">Add Scout</span>
           </a>
@@ -48,7 +49,7 @@
           <ul class="sidenav-second-level collapse" id="collapseComponents">
             {% for section in sections %}
             <li>
-                <a href= '{% url 'scoutList' section.id %}' >{{section.name}}</a>
+                <a href= '{% url 'boyScouts:scoutList' section.id %}' >{{section.name}}</a>
             </li>
             {% endfor %}
           </ul>
@@ -101,7 +102,7 @@
           <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
           <div class="modal-footer">
             <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-            <a class="btn btn-primary" href="login.html">Logout</a>
+            <a class="btn btn-primary" href="{% url 'boyScouts:logoutView' %}">Logout</a>
           </div>
         </div>
       </div>

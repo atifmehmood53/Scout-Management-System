@@ -2,114 +2,137 @@
 <script src="{% static 'boyScouts/js/jquery.formset.js' %}"></script>
 
 <div class="container">
-    <form method="POST">
-        {% csrf_token %}
-        <div class="card">
-            <div class=" card-header">
-                <h3>Student Details</h3>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="text-center col-sm-12 col-md-6">
-                        {% if instance.image %}
-                        <img class="text-center img-fluid" src="{{instance.image.url}}" alt="" style="border-radius:100%; " width="50%"> {% else %}
-                        <i class=" fa fa-5x  fa-user-circle" style="font-size:10rem"></i>
-                        {% endif %}
-                    </div>
-                    <div class="col-sm-12 col-md-6">
-                        <h4>Name: {{instance.name}}</h4>
-                        <h4></h4>
-                        <hr>
-                        <h4>Date of Birth:</h4>
-                        <h4>{{instance.dateOfBirth}}</h4>
-                        <hr>
-                        <h4>Joining Date:</h4>
-                        <h4>{{instance.dateOfJoining}}</h4>
-                        <hr>
-                        <h4>Education:</h4>
-                        <h4>{{instance.highestScoutEducation}}</h4>
-                    </div>
+
+    {% csrf_token %}
+    <div class="card">
+        <div class=" card-header">
+            <h3>Student Details</h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="text-center col-sm-12 col-md-6">
+                    {% if instance.image %}
+                    <img class="text-center img-fluid" src="{{instance.image.url}}" alt="" style="border-radius:100%; " width="50%"> {% else %}
+                    <i class=" fa fa-5x  fa-user-circle" style="font-size:10rem"></i>
+                    {% endif %}
                 </div>
-
+                <div class="col-sm-12 col-md-6">
+                    <h5 class="text-success">{{message}}</h5>
+                    <h4>Name: {{instance.name}}</h4>
+                    <h4></h4>
+                    <hr>
+                    <h4>Date of Birth:</h4>
+                    <h4>{{instance.dateOfBirth}}</h4>
+                    <hr>
+                    <h4>Joining Date:</h4>
+                    <h4>{{instance.dateOfJoining}}</h4>
+                    <hr>
+                    <h4>Education:</h4>
+                    <h4>{{instance.highestScoutEducation}}</h4>
+                    <hr>
+                    <h4>Group:</h4>
+                    <h4>{{instance.group}}</h4>
+                    <hr>
+                    <h4>Section:</h4>
+                    <h4>{{instance.section}}</h4>
+                </div>
             </div>
-
 
         </div>
-        <div class="card mb-3 mt-3">
-            <div class=" card-header">
-                <h3>Rank Badges Earned</h3>
-            </div>
-            <div class="card-body">
-                <table class="table table-sm table-light">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th scope="col">Badge Name</th>
-                            <th scope="col">Passing Date</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for badge in rankedBadges %}
-                        <td class="lead col-4">{{badge.badge.name}}</td>
-                        <td class="lead col-4"> {{badge.dateOfPassing}}</td>
 
-                        {% endfor %} {% for form in rankFormSet %}
-                        <tr class="rank-form ">
 
-                            {% for fields in form %}
-                            <td class=" col-6">
-                                {{fields}}
-                                <span style="color:red;">{{fields.errors}}</span>
-                            </td>
-                            {% endfor %}
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                    {{ rankFormSet.management_form }}
-                </table>
-            </div>
-            <div class="card">
-                    <div class="card-header">
-                            <h3>Proficiency Badges Earned</h3>
-                        </div>
-                <div class="card-body">
-
-                    <hr>
-                    <table class="table table-sm table-light">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th scope="col">Badge Name</th>
-                                <th scope="col">Passing Date</th>
-                                <th scope="col">Certificate #</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for badge in proficiencyBadges %}
-                            <td class="lead col-4">{{badge.badge.name}}</td>
-                            <td class="lead col-4"> {{badge.dateOfPassing}}</td>
-                            <td class="lead col-4"> {{badge.certificateNo}}</td>
-
-                            {% endfor %} {% for form in proficiencyFormSet %}
-                            <tr class="proficiency-form ">
-                                {% for fields in form %}
-                                <td class=" col-4">
-                                    {{fields}}
-                                    <span style="color:red;">{{fields.errors}}</span>
-                                </td>
-                                {% endfor %}
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                        {{proficiencyFormSet.management_form }}
-                    </table>
-                </div>
-                <div class=" card-footer">
-                    <button class="btn  btn-primary float-right" disabled>Update</button>
-                </div>
-
-            </div>
-
-    </form>
     </div>
+    <div class=" card mt-3">
+
+        <div class="card-header">
+            <h3>Existing Rank Badges Earned</h3>
+        </div>
+        <div class="card-body">
+            <table class="table table-light table-responsive">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Badge Name</th>
+                        <th scope="col">Passing Date</th>
+                        <th scope="col">Approved</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    {% for category, badges in rankBadges %}
+
+                    <tr class="mt-2 bg-info text-white">
+                        <th>{{category}} Badges</th>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    {% if badges|length == 0 %}
+                    <tr>
+                        <td>No badges.</td>
+                    </tr>
+                    {% else %} {% for badge in badges %}
+                    <tr>
+                        <td class=" col-6">{{badge.badge.name}}</td>
+                        <td class=" col-6"> {{badge.dateOfPassing}}</td>
+                        <td class=" col-6"> {{badge.is_approved}}</td>
+                    </tr>
+                    {% endfor %} {% endif %} {% endfor %}
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+
+
+    <div class="card">
+        <div class="card-header">
+            <h3>Existing Proficiency Badges Earned</h3>
+        </div>
+        <div class="card-body">
+
+
+            <table class="table table-light table-responsive-sm">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Badge Name</th>
+                        <th scope="col">Passing Date</th>
+                        <th scope="col">Certificate #</th>
+                        <th scope="col">Approved</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for category, badges in proficiencyBadges %}
+                    <tr class="mt-2 p-5 bg-info text-white">
+                        <th class='d-table-cell'>{{category}} Badges</th>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    {% if badges|length == 0 %}
+                    <tr>
+                        <td>No badges.</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+
+                    </tr>
+                    {% else %} {% for badge in badges %}
+                    <tr>
+                        <td>{{badge.badge.name}}</td>
+                        <td> {{badge.dateOfPassing}}</td>
+                        <td>{{badge.certificateNo}}</td>
+                        <td> {{badge.is_approved}}</td>
+                    </tr>
+
+                    {% endfor %} {% endif %} {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class=" card-footer">
+            <a class="btn  btn-primary float-right" href={ % url 'boyScouts:editScoutBadges' instance.id %}>Edit Badges</a>
+        </div>
+    </div>
+
+
     <script>
         var incrementFormCount = function (row) {
             console.log("Ok");

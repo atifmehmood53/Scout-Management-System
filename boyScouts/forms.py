@@ -22,6 +22,15 @@ class admissionForm(forms.Form):
     # Badge Details 
     
 class Scout_Form(forms.ModelForm):
+    def __init__(self,userGroup, *args, **kwargs):
+        super().__init__(*args,**kwargs)
+        if userGroup != 'superuser':
+            self.fields['group'].initial = userGroup.group.id
+            self.fields['group'].disabled = True
+            self.fields['section'].initial = userGroup.section.id
+            self.fields['section'].disabled = True
+       
+
     class Meta:
         model = models.Scout
         fields = '__all__'
@@ -35,40 +44,112 @@ class Scout_Form(forms.ModelForm):
             'image' : forms.FileInput({'class' : 'form-control field ',}),
         }
 
-class Scout_Ranked_Badge_Form(forms.Form):
-    #have to work on section
-    badge = forms.ModelChoiceField(models.Badge.objects.filter(category__name ='Rank Badge',),to_field_name="name",widget=forms.Select({'class' : 'form-control field ',}))
-    dateOfPassing= forms.DateField(widget= forms.DateInput({'class' : 'form-control field date','placeholder':'yyyy-mm-dd'}),required=True)
+
+class Scout_Rank_Badge_FormAdmin(forms.ModelForm):
+    def __init__(self,scoutSection,badgeCategory, *args, **kwargs):
+        super().__init__(*args,**kwargs)
+        self.category = badgeCategory
+        self.section = scoutSection
+        
+       
+    def reset(self):
+        self.fields['badge'].queryset = self.fields['badge'].queryset.filter(section=self.section,category=self.category) 
 
 
-class Scout_Proficiency_Badge_Form(forms.Form):
-    badge = forms.ModelChoiceField(models.Badge.objects.filter(category__name ='Proficiency Badge'),widget=forms.Select({'class' : 'form-control field ',}))
-    dateOfPassing = forms.DateField(widget= forms.DateInput({'class' : 'form-control field date','placeholder':'yyyy-mm-dd'}),)
-    certificateNo =  forms.CharField(max_length=4,widget= forms.TextInput({'class' : 'form-control field ','placeholder':'Certificate #'}),required=True)
-
-
-"""
-class admissionForm(forms.ModelForm):
     class Meta:
-        #model = models.Student
-        fields ='__all__'
-        widgets = {
-            'name' : forms.TextInput({'class' : 'form-control field ',}),
-            'fatherName': forms.TextInput({'class' : 'form-control field ',}),
-            'dateOFBirth': forms.DateInput({'class' : 'form-control field ',}),
-            'contactNumber' :  forms.TextInput({'class' : 'form-control field ',}),
-            'cnic' : forms.TextInput({'class' : 'form-control field ',}),
-            'email' : forms.EmailInput(attrs={'class' : 'form-control '}),
-            'secularEducation' : forms.Select({'class' : 'form-control field ',},choices=((1,'school'),(2,'matric'),(3,'intermediate'),(4,'Bachlors'),(5,'Master'),('6','PhD'))),
-            'religiousEducation' : forms.TextInput({'class' : 'form-control field ',}),
-            'bloodGroup' : forms.SelectMultiple({'class' : 'form-control field ',}),
-            'residentialAddress' : forms.TextInput({'class' : 'form-control field ',}),
-            'transferForm' : forms.TextInput({'class' : 'form-control field ',}),
+        """Meta definition for Scout_Ranked_Badgeform."""
 
+        model = models.Scout_Rank_Badge
+        fields = ('dateOfPassing','badge','is_approved')
+        widgets ={
+            'dateOfPassing':forms.DateInput({'class' : 'form-control field date','placeholder':'yyyy-mm-dd'}),
+            'badge':forms.Select({'class' : 'form-control field ',}),
+            
         }
-    
-    # Badge Details 
-    
 
-   
-    """
+
+class Scout_Proficiency_Badge_FormAdmin(forms.ModelForm):
+    def __init__(self,scoutSection,badgeCategory, *args, **kwargs):
+        super().__init__(*args,**kwargs)
+        self.category = badgeCategory
+        self.section = scoutSection
+        
+       
+    def reset(self):
+        print("OLD Query",self.fields['badge'].queryset)
+        self.fields['badge'].queryset = self.fields['badge'].queryset.filter(section=self.section,category=self.category) 
+        print("New Query",self.fields['badge'].queryset)
+
+
+    class Meta:
+        """Meta definition for Scout_Ranked_Badgeform."""
+
+        model = models.Scout_Proficiency_Badge
+        fields = ('dateOfPassing','badge','certificateNo','is_approved')
+        widgets ={
+            'dateOfPassing':forms.DateInput({'class' : 'form-control field date','placeholder':'yyyy-mm-dd'}),
+            'badge':forms.Select({'class' : 'form-control field ',}),
+            'certificateNo':forms.TextInput({'class' : 'form-control field ','placeholder':'Certificate #',}),
+        }
+
+
+
+class Scout_Rank_Badge_Form(forms.ModelForm):
+    def __init__(self,scoutSection,badgeCategory, *args, **kwargs):
+        super().__init__(*args,**kwargs)
+        self.category = badgeCategory
+        self.section = scoutSection
+        
+       
+    def reset(self):
+        self.fields['badge'].queryset = self.fields['badge'].queryset.filter(section=self.section,category=self.category) 
+
+
+    class Meta:
+        """Meta definition for Scout_Ranked_Badgeform."""
+
+        model = models.Scout_Rank_Badge
+        fields = ('dateOfPassing','badge')
+        widgets ={
+            'dateOfPassing':forms.DateInput({'class' : 'form-control field date','placeholder':'yyyy-mm-dd'}),
+            'badge':forms.Select({'class' : 'form-control field ',}),
+            
+        }
+
+
+class Scout_Proficiency_Badge_Form(forms.ModelForm):
+    def __init__(self,scoutSection,badgeCategory, *args, **kwargs):
+        super().__init__(*args,**kwargs)
+        self.category = badgeCategory
+        self.section = scoutSection
+        
+       
+    def reset(self):
+        print("OLD Query",self.fields['badge'].queryset)
+        self.fields['badge'].queryset = self.fields['badge'].queryset.filter(section=self.section,category=self.category) 
+        print("New Query",self.fields['badge'].queryset)
+
+
+    class Meta:
+        """Meta definition for Scout_Ranked_Badgeform."""
+
+        model = models.Scout_Proficiency_Badge
+        fields = ('dateOfPassing','badge','certificateNo')
+        widgets ={
+            'dateOfPassing':forms.DateInput({'class' : 'form-control field date','placeholder':'yyyy-mm-dd'}),
+            'badge':forms.Select({'class' : 'form-control field ',}),
+            'certificateNo':forms.TextInput({'class' : 'form-control field ','placeholder':'Certificate #',}),
+        }
+
+
+
+class BadgeForm(forms.ModelForm):
+    
+    class Meta:
+        model =models.Badge
+        fields = '__all__'
+        widgets ={
+            'name':forms.TextInput({'class' : 'form-control field ','placeholder':'Badge Name',}),
+            'category':forms.Select({'class' : 'form-control field ',}),
+            'section':forms.Select({'class' : 'form-control field ',}),
+        }

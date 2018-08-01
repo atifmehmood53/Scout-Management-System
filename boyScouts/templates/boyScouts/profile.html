@@ -1,46 +1,71 @@
 {% extends 'boyScouts/blank.html' %} {% block mainContent %}
 
 
-<div class="row ">
-    {% load staticfiles %}
-    <div class="col-12 img-fluid text-center">
-        <img alt="User Pic" class="img-fluid" style="border-radius:100%" src="{% static 'boyScouts/img/alizar.jpg' %}">
-        <hr>
-        <h4 class="">
-            {{groupObject.user.username}}
-        </h4>
-    </div>
-    <div class="container card-body">
-        <table class="table font-weight-bold table-user-information">
-            <tbody>
-                <tr>
-                    <td>First Name:</td>
-                    <td>{{groupObject.user.first_name}}</td>
-                </tr>
-                
-                <tr>
-                        <td>Last Name:</td>
-                        <td>{{groupObject.user.last_name}}</td>
-                </tr>
-                <tr>
-                        <td>Group:</td>
-                        <td>{{groupObject.group.name}}</td>
-                </tr>
-                <tr>
-                    <td>Section:</td>
-                    <td>{{groupObject.section.name}}</td>
-            </tr>
-                <tr>
-                        <td>Email:</td>
-                        <td>{{groupObject.user.email}}</td>
-                </tr>
 
-            </tbody>
-        </table>
 
-       
-    </div>
+
+
+<div class="container">
+        <div class="card">
+                <div class="card-header">
+                        <h4 class="">
+                                {{request.user.username}}
+                        </h4>
+                </div>
+                <div class="card-body">
+                        <div class="row ">
+                                {% load staticfiles %}
+                                <div class="col-sm-12 col-md-6 img-fluid text-center">
+                                    <img alt="User Pic" class="img-fluid" style="border-radius:100%" src="{% static 'boyScouts/img/alizar.jpg' %}">    
+                                </div>
+                                <div class="col-sm-12 col-md-6">
+                                    <table class="table font-weight-bold table-user-information">
+                                        <tbody>
+                                            <tr>
+                                                <td>First Name:</td>
+                                                <td>{{request.user.first_name}}</td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                    <td>Last Name:</td>
+                                                    <td>{{request.user.last_name}}</td>
+                                            </tr>
+                                            <tr> 
+                                                    <td>Group:</td>
+                                                    {% if groupObject != 'superuser' %}
+                                                    <td>{{groupObject.group.name}}</td>
+                                                    {% else %}
+                                                    <td>Super User</td>
+                                                    {% endif %}
+                                            </tr>
+                                            {% if groupObject != 'superuser' %}
+                                            <tr>
+                                                <td>Section:</td>
+                                                <td>{{groupObject.section.name}}</td>
+                                            </tr>
+                                            {% endif %}
+                                            <tr>
+                                                    <td>Email:</td>
+                                                    {% if groupObject != 'superuser' %}
+                                                    <td>{{groupObject.group.name}}</td>
+                                                    {% else %}
+                                                    <td>{{user.email}}</td>
+                                                    {% endif %}
+                                                    
+                                            </tr>
+                                            
+                            
+                                        </tbody>
+                                    </table>
+                            
+                                </div>
+                            </div>  
+                </div>
+            
+            </div>
 </div>
+
+
 
 
 
