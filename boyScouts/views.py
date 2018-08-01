@@ -141,7 +141,11 @@ def editScoutBadges(request,id):
 
 
 
-
+def redirectView(request):
+    if request.user.is_superuser:
+        return redirect(reverse('AdminApp:profile'))
+    else:
+        return redirect(reverse('boyScouts:profile'))
 
 
 

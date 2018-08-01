@@ -22,6 +22,7 @@ app_name = 'boyScouts'
 
 
 urlpatterns = [
+    path('',views.redirectView),
     path('login',views.loginView,name='loginView'),
     path('logout',views.logoutView,name='logoutView'),
     path('profile',views.profile,name='profile'),
