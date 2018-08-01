@@ -82,8 +82,5 @@ class Scout_Proficiency_Badge(models.Model):
     certificateNo = models.CharField(max_length=4,blank=True)
     is_approved = models.BooleanField(default=False)
     def __str__(self):
-<<<<<<< HEAD
         return self.scout.name + ' | '+self.badge.section.name + ' | '+ self.badge.name 
-=======
-        return self.scout.name +" | "+self.badge.__str__()
->>>>>>> 92bc98177115a4856b65fefb17d26c25b1b7385e
+
