@@ -11,8 +11,9 @@ import hello.views
 # url(r'^blog/', include('blog.urls')),
 
 urlpatterns = [
-    path('app/',include('boyScouts.urls')),
-    url(r'^$', hello.views.index, name='index'),
+    path('',include('boyScouts.urls')),
+    path('superuser/',include('AdminApp.urls')),
+    #url(r'^$', hello.views.index, name='index'),
     url(r'^db', hello.views.db, name='db'),
     path('admin/', admin.site.urls),
 ]
