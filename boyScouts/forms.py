@@ -64,7 +64,7 @@ class Scout_Rank_Badge_FormAdmin(forms.ModelForm):
         widgets ={
             'dateOfPassing':forms.DateInput({'class' : 'form-control field date','placeholder':'yyyy-mm-dd'}),
             'badge':forms.Select({'class' : 'form-control field ',}),
-            
+            'is_approved':forms.CheckboxInput({'label':'approved'})
         }
 
 

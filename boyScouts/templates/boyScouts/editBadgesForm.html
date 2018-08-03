@@ -5,6 +5,7 @@
     </li>
     <li class="breadcrumb-item active">Admission Form</li>
 </ol>
+
 {% load staticfiles %}
 <link rel="stylesheet" href="{% static 'boyScouts/css/flatpickr.min.css' %}">
 <script src="{% static 'boyScouts/js/flatpickr.js' %}"></script>
@@ -156,7 +157,9 @@
 
                 <div class="row {{formset.prefix}}_{{forloop.parentloop.counter}}">
                     {% for fields in form %}
-
+                    {% if  fields.label == 'Is approved' %}
+                            <strong>{{fields.label}}</strong>
+                    {% endif %}
                     <div class="col-6 badge-field">{{fields}}{{fields.errors}}</div class="col-6">
                     {% endfor %}
 
@@ -183,7 +186,11 @@
 
                 <div class="row {{formset.prefix}}_{{forloop.parentloop.counter}}">
                     {% for fields in form %}
-
+                    
+                    {% if  fields.label == 'Is approved' %}
+                    <strong>{{fields.label}}</strong>
+                    {% endif %}
+                    
                     <div class="col-4 badge-field">{{fields}}{{fields.errors}}</div class="col-6">
                     {% endfor %}
 
@@ -208,8 +215,8 @@
         $(".date").flatpickr();
         console.log('called')
     }
-
-
+    datepickerRefresh();
+    $(".date").flatpickr();
 
     var incrementFormCount = function (row) {
         console.log("Ok");
