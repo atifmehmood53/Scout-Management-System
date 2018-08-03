@@ -27,5 +27,6 @@ urlpatterns = [
     path('admission',views.admission,name='admissionForm'),
     path('addBadges',views.addBadges,name='addBadges'),
     path('badges/<slug:category>/<int:section_id>',views.displayBadges,name='displayBadges'),
+    #path('deleteBadges/',views.deleteBadge,name='deleteBadges'),
     
 ]

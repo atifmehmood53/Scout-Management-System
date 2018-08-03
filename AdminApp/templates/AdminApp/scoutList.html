@@ -7,9 +7,27 @@
 
 </ol>
 
+<form method="POST">
+     {% csrf_token %}
+     <hr>
+    <div class="row">
+        <hr> {% for field in filter %}
+        <div class="col-md-3 col-lg-3">
+            {{field}}
+        </div>
+        {% endfor %}
+        <hr>
+    </div>
+    <div class="container">
+            <button class=" mt-2 btn btn-block btn-small btn-primary text-center"><li class=" fa fa-filter"></li></button>
+    </div>
+    
+    <hr>
+    
+    
+</form>
 
-
-<div class="row">
+<div class="row mt-2">
         {% for scout in scoutList %}
         
     <div class="col-xl-3 col-sm-6 mb-3">

@@ -1,50 +1,84 @@
-{% extends 'AdminApp/blank.html' %}
-{% block mainContent %}
+{% extends 'AdminApp/blank.html' %} {% block mainContent %}
 <ol class="breadcrumb">
     <li class=" breadcrumb-item">
-            Showing <span class=" font-weight-bold text-primary">{{badges|length}} {{category}} </span> Badges
+        Showing
+        <span class=" font-weight-bold text-primary">{{badges|length}} {{category}} </span> Badges
     </li>
 
 </ol>
+{% if errorslist|length != 0 %}
+    <div id="danger-alert" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>Following badges could not be deleted:</strong>
+        {% for badge in errorslist %}
+        <ul>
+            <li>
+                <strong>{{badge}}</strong>
+            </li>
+        </ul>
+        {% endfor %}
+        
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+{% endif %}
+<form  method="POST">
+    {% csrf_token %}
+    <hr>
+    <button class="btn btn-sm"  type="submit">Delete Selected</button>
+    <hr>
+
+
 <div class="row">
 
+    
+        
+        {% for badge in badges %}
+        <div class="col-xl-3 col-sm-6 mb-3">
+            <div class="card text-white bg-dark o-hidden h-100">
+                <div class="card-body">
+                    <h4 class="font-weight-bold float-left">{{badge.name}}</h4>
+                    <div class="float-right">
 
-{% for badge in badges %}
-<div class="col-xl-3 col-sm-6 mb-3">
-    <div class="card text-white bg-dark o-hidden h-100">
-        <div class="card-body">
-            <h4 class="font-weight-bold float-left">{{badge.name}}</h4>
-            <div class="float-right">
-                
-                <i class=" fa fa-4x  fa-star"  ></i>
-         
-                
-            </div>
-            
-        </div>
-        <div class="card-footer text-white clearfix small z-1" >
-                <span class="float-left">Name: </span>
-                <span class="float-right">{{badge.name}}</span>
-            </div>
-            <div class="card-footer text-white clearfix small z-1" >
+                        <i class=" fa fa-4x  fa-star"></i>
+
+
+                    </div>
+
+                </div>
+                <div class="card-footer text-white clearfix small z-1">
+                    <span class="float-left">Name: </span>
+                    <span class="float-right">{{badge.name}}</span>
+                </div>
+                <div class="card-footer text-white clearfix small z-1">
                     <span class="float-left">Category: </span>
                     <span class="float-right">{{badge.category}}</span>
                 </div>
-                <div class="card-footer text-white clearfix small z-1" >
-                        <span class="float-left">Section: </span>
-                        <span class="float-right">{{badge.section}}</span>
-                    </div>
-        <a class="card-footer text-white clearfix small z-1" href="#">
-            <span class="float-left">View Details</span>
-            <span class="float-right">
-                <i class="fa fa-angle-right"></i>
-            </span>
-        </a>
-       
-    </div>
-</div>
 
-{% endfor %}
+                <div class="card-footer text-white clearfix small z-1">
+                    <span class="float-left">Section: </span>
+                    <span class="float-right">{{badge.section}}</span>
+                </div>
+                <div class="card-footer text-white clearfix small z-1">
+                    <span class="float-left">Check if you want to delete: </span>
+                    <span class="float-right">
+                        <input type="checkbox" name="{{badge.id}}">
+                    </span>
+                </div>
+                <a class="card-footer text-white clearfix small z-1" href="#">
+                    <span class="float-left">View Details</span>
+                    <span class="float-right">
+                        <i class="fa fa-angle-right"></i>
+                    </span>
+                </a>
+
+
+            </div>
+        </div>
+
+        {% endfor %}
+   
 </div>
+</form>
+
 {% endblock mainContent %}
-

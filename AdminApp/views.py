@@ -19,8 +19,9 @@ from boyScouts.helpers import  *
 
 @login_required(login_url='/login')
 def profile(request):
+    ScoutFilterForm = forms.ScoutFilterForm()
     if request.user.is_superuser:
-        return  render(request,'AdminApp/profile.html', context={'sections':getSections('superuser')})
+        return  render(request,'AdminApp/profile.html', context={'sections':getSections('superuser'),'ScoutFilterForm':ScoutFilterForm})
     return HttpResponse("you are not authorized to this view.")
 
 
@@ -30,10 +31,16 @@ def profile(request):
 def scoutsList(request,id):
     if not request.user.is_superuser :
         return HttpResponse("You Don't have any assigned group, please contact your admin.")
-    else:
-        scouts = models.Scout.objects.all().filter(section_id = id)
+    filter = forms.ScoutFilterForm()
+    scouts = models.Scout.objects.all().filter(section_id = id)
+    if request.method == 'POST':
+        filter = forms.ScoutFilterForm(request.POST)
+        scouts = filter.getFilteredQuery(scouts)
+    
+        
+    
     scouts = scouts.annotate(number_of_rank=Count('scout_rank_badge',distinct=True)).annotate(number_of_proficiency=Count('scout_proficiency_badge',distinct=True))
-    return  render(request,'AdminApp/scoutList.html', context={'scoutList':scouts,'sections':getSections('superuser'),'category':models.Section.objects.get(id = id)})
+    return  render(request,'AdminApp/scoutList.html', context={'scoutList':scouts,'sections':getSections('superuser'),'category':models.Section.objects.get(id = id),'filter':filter})
 
 
 
@@ -65,7 +72,7 @@ def scoutDetails(request,id):
 
 @login_required(login_url='/login')
 def admission(request):
-    
+    print(request.POST)
     if not request.user.is_superuser :
         return HttpResponse("You Don't have any assigned group, please contact your admin.")
     admissionForm = forms.Scout_Form('superuser')
@@ -78,8 +85,8 @@ def admission(request):
         if admissionForm.is_valid() :
             newScout = admissionForm.save()
             admissionForm = forms.Scout_Form('superuser')
-            return redirect(reverse('AdminApp:editScoutBadges',args=[newScout.id]))
-            #return render(request,'AdminApp/admissionForm.html',context={'sections':getSections('superuser'),'admissionForm':admissionForm})
+            #return redirect(reverse('AdminApp:editScoutBadges',args=[newScout.id]))
+            return render(request,'AdminApp/admissionForm.html',context={'sections':getSections('superuser'),'admissionForm':admissionForm,'message':reverse('AdminApp:editScoutBadges',args=[newScout.id])})
 
     return  render(request,'AdminApp/admissionForm.html',context={'sections':getSections('superuser'),'admissionForm':admissionForm})
 
@@ -117,7 +124,8 @@ def addBadges(request):
     context={'sections':getSections('superuser')}
     if request.method == 'POST':
         badgeForm = forms.BadgeForm(request.POST)
-        if not badgeForm.is_valid:
+        print(request.POST,badgeForm.is_valid())
+        if not badgeForm.is_valid():
             context['badgeForm'] = badgeForm
             
             return render(request,'AdminApp/badgeForm.html',context=context)
@@ -135,6 +143,22 @@ def displayBadges(request,category,section_id):
         return HttpResponse("You Don't have any assigned group, please contact your admin.")
     print(category,category == 'RB',section_id)
     context={'sections':getSections('superuser')}
+
+    errorslist = []
+    
+    if request.method == 'POST':
+        print(request.method)
+        dict = request.POST.copy()
+        del dict['csrfmiddlewaretoken']        
+        for badge in dict:
+            
+            instance = models.Badge.objects.get(id=int(badge))
+            print(instance)
+            try:
+                instance.delete()
+            except:
+                errorslist.append(instance.name)
+    context['errorslist'] = errorslist
     badges = None
     queryset = models.Badge.objects.filter(section = section_id)
     if category == 'PB':
@@ -146,3 +170,5 @@ def displayBadges(request,category,section_id):
     context['badges']= queryset
     return render(request,'AdminApp/displayBadges.html',context=context)
 
+
+    

@@ -153,3 +153,23 @@ class BadgeForm(forms.ModelForm):
             'category':forms.Select({'class' : 'form-control field ',}),
             'section':forms.Select({'class' : 'form-control field ',}),
         }
+
+
+class ScoutFilterForm(forms.Form):
+    group = forms.ModelChoiceField(models.Group.objects.all(),required=False,label='Group',widget=forms.Select({'class' : 'form-control field ','placeholder':'group'}),empty_label="All")
+    name = forms.CharField(required=False,widget=forms.TextInput({'class' : 'form-control field ','placeholder':'Name',}))
+    id = forms.IntegerField(required=False,widget=forms.TextInput({'class' : 'form-control field ','placeholder':'ID',}))
+
+    def getFilteredQuery(self,querySet):
+        group = self.data['group']
+        name = self.data['name']
+        id = self.data['id']
+        print(group,name,id)
+        
+        if id:
+            return querySet.filter(id=id)
+        if not name =='' :
+            querySet= querySet.filter(name__contains=name)
+        if group:
+            querySet= querySet.filter(group_id=group)
+        return querySet

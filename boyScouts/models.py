@@ -66,7 +66,7 @@ class Scout(models.Model):
 
 
 class Scout_Rank_Badge(models.Model):
-    badge = models.ForeignKey(Badge,on_delete=models.CASCADE)
+    badge = models.ForeignKey(Badge,on_delete=models.PROTECT)
     scout = models.ForeignKey(Scout,on_delete=models.CASCADE)
     dateOfPassing = models.DateField()
     is_approved = models.BooleanField(default=False)
@@ -76,7 +76,7 @@ class Scout_Rank_Badge(models.Model):
 
 
 class Scout_Proficiency_Badge(models.Model):
-    badge = models.ForeignKey(Badge,on_delete=models.CASCADE)
+    badge = models.ForeignKey(Badge,on_delete=models.PROTECT)
     scout = models.ForeignKey(Scout,on_delete=models.CASCADE)
     dateOfPassing = models.DateField()
     certificateNo = models.CharField(max_length=4,blank=True)

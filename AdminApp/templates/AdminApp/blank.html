@@ -18,6 +18,7 @@
   <link href="{% static 'boyScouts/css/sb-admin.css' %}" rel="stylesheet">
   <script src="{% static 'boyScouts/vendor/jquery/jquery.min.js' %}"></script>
   <link href="{% static 'boyScouts/css/styles.css' %}" rel="stylesheet">
+  <script src="{% static 'boyScouts/js/jquery.min.js' %}"></script>
 </head>
 
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
@@ -39,13 +40,13 @@
         </li>
 
         <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Tables">
-          <a class="nav-link" href="{% url 'AdminApp:admissionForm' %}">
+          <a class="nav-link" id="admissionBtn" href="{% url 'AdminApp:admissionForm' %}">
             <i class="fa fa-fw fa-user-plus"></i>
             <span class="nav-link-text">Add Scout</span>
           </a>
         </li>
         <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Tables">
-          <a class="nav-link" href="{% url 'AdminApp:addBadges' %}">
+          <a id='addBadgeBtn' class="nav-link" href="{% url 'AdminApp:addBadges' %}">
             <i class="fa fa-fw fa-plus-square"></i>
             <span class="nav-link-text">Add Badges</span>
           </a>
@@ -59,7 +60,9 @@
             {% for section in sections %}
             <li>
               <a href="{% url 'AdminApp:scoutList' section.id %}">{{section.name}}</a>
+             
             </li>
+            
             {% endfor %}
           </ul>
 
@@ -110,7 +113,7 @@
     </div>
   </nav>
   <div class="content-wrapper">
-    <div class="container-fluid">
+    <div id="mainContent" class="container-fluid">
       <!-- Breadcrumbs-->
       {% block mainContent %} {% endblock mainContent %}
 
@@ -148,7 +151,7 @@
       </div>
     </div>
     <!-- Bootstrap core JavaScript-->
-
+    
     <script src="{% static 'boyScouts/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
     <!-- Core plugin JavaScript-->
     <script src="{% static 'boyScouts/vendor/jquery-easing/jquery.easing.min.js' %}"></script>
@@ -157,6 +160,13 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
 
   </div>
+<script>
+
+
+</script>
+<script>
+  
+</script>
 </body>
 
 </html>
