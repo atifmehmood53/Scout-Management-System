@@ -169,7 +169,7 @@ class ScoutFilterForm(forms.Form):
         if id:
             return querySet.filter(id=id)
         if not name =='' :
-            querySet= querySet.filter(name__contains=name)
+            querySet= querySet.filter(name__icontains=name)
         if group:
             querySet= querySet.filter(group_id=group)
         return querySet
