@@ -27,6 +27,7 @@ urlpatterns = [
     path('admission',views.admission,name='admissionForm'),
     path('addBadges',views.addBadges,name='addBadges'),
     path('badges/<slug:category>/<int:section_id>',views.displayBadges,name='displayBadges'),
-    #path('deleteBadges/',views.deleteBadge,name='deleteBadges'),
+    path('approveBadges/<slug:badge_category>',views.approveBadges,name='approveBadges'),
+    #path('deleteBadges/',views.deleteBadge,name='C:\Users\Atif Mehmood\Desktop\IDBVS'),
     
 ]

@@ -17,7 +17,7 @@ class Group(models.Model):
 
 class Section(models.Model):
     name = models.CharField(max_length=30)
-    prerequisite = models.OneToOneField('self',on_delete=models.SET_NULL,null=True)
+    prerequisite = models.OneToOneField('self',on_delete=models.SET_NULL,null=True,default=None,blank=True)
     def __str__(self):
         return self.name
 
@@ -44,7 +44,7 @@ class Badge(models.Model):
     name = models.CharField(max_length= 100,unique=True)
     category = models.CharField(max_length=30,choices=badge_categories)
     section = models.ForeignKey(Section,on_delete=models.CASCADE)
-    
+    approval_required = models.BooleanField(default=False)
     def __str__(self):
         return self.name +' | '+ self.category+ ' | ' +  self.section.name
 
@@ -70,7 +70,9 @@ class Scout_Rank_Badge(models.Model):
     scout = models.ForeignKey(Scout,on_delete=models.CASCADE)
     dateOfPassing = models.DateField()
     is_approved = models.BooleanField(default=False)
+    
 
+    
     def __str__(self):
         return self.scout.name + ' | '+self.badge.section.name + ' | '+ self.badge.name 
 
@@ -81,5 +83,6 @@ class Scout_Proficiency_Badge(models.Model):
     dateOfPassing = models.DateField()
     certificateNo = models.CharField(max_length=4,blank=True)
     is_approved = models.BooleanField(default=False)
+    
     def __str__(self):
         return self.scout.name + ' | '+self.badge.section.name + ' | '+ self.badge.name 

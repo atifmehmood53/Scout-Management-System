@@ -172,3 +172,40 @@ def displayBadges(request,category,section_id):
 
 
     
+@login_required(login_url='/login')
+def approveBadges(request, badge_category):
+    context={'sections':getSections('superuser')}
+    filter = forms.approveBadgeFilterForm()
+    if badge_category == 'RB':
+        querySet = models.Scout_Rank_Badge.objects.filter(badge__approval_required=True,is_approved= False)
+    elif badge_category == 'PB':
+        querySet = models.Scout_Proficiency_Badge.objects.filter(badge__approval_required=True,is_approved= False)
+
+    
+    if request.method == 'POST':
+        filter = forms.approveBadgeFilterForm(request.POST)
+        querySet = filter.getFilteredQuery( querySet)
+        print(request.POST)
+        dict = request.POST.copy()
+        del dict['csrfmiddlewaretoken']
+        print(dict)
+        for i in dict:
+            instance = i.split('_')
+            if badge_category == 'RB':
+                if instance[0]=='delete':
+                    models.Scout_Rank_Badge.objects.filter(id=str(instance[1])).delete()
+                elif instance[0]=='approve':
+                    models.Scout_Rank_Badge.objects.filter(id=str(instance[1])).update(is_approved= True)
+            elif badge_category == 'PB':
+                if instance[0]=='delete':
+                    models.Scout_Proficiency_Badge.objects.filter(id=str(instance[1])).delete()
+                if instance[0]=='approve':
+                    models.Scout_Proficiency_Badge.objects.filter(id=str(instance[1])).update(is_approved= True)
+            
+
+
+    
+    context['filter'] = filter
+    context['badges'] = querySet
+
+    return render(request,'AdminApp/approveBadges.html',context=context)

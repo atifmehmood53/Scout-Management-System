@@ -1,0 +1,78 @@
+{% extends 'AdminApp/blank.html' %} {% block mainContent %}
+<ol class="breadcrumb">
+    <li class=" breadcrumb-item">
+        Showing
+        <span class=" font-weight-bold text-primary">{{badges|length}} {{category}} </span> Unapproved Badges
+    </li>
+
+</ol>
+<form method="POST">
+    {% csrf_token %}
+    <hr>
+    <div class="row">
+        {% for field in filter %}
+        <div class="col-md-4 col-lg-4">
+            {{field.label}} {{field}}
+        </div>
+        {% endfor %}
+
+    </div>
+    <div class="container">
+        <button class=" mt-2 btn btn-block btn-small btn-primary text-center"><li class=" fa fa-filter"></li></button>
+    </div>
+</form>
+
+
+<form action="" method="POST">
+    {% csrf_token %}
+    <hr> {% if badges|length > 0 %}
+    <button class=" btn btn-success">Update</button>
+    <hr> {% endif %}
+
+
+    <div class="row mt-2">
+        {% for badge in badges %}
+        <div class="col-xl-3 col-sm-6 mb-3">
+            <div class="card text-white bg-info o-hidden h-100">
+                <div class="card-body">
+                    <h4 class="font-weight-bold float-left">{{badge.scout.name}}</h4>
+                    <div class="float-right">
+                        <i class=" fa fa-4x  fa-user-circle"></i>
+                    </div>
+
+                </div>
+                <div class="card-footer text-white font-weight-bold clearfix small z-1">
+                    <span class="float-left">Group: </span>
+                    <span class="float-right">{{badge.scout.group}}</span>
+                </div>
+                <div class="card-footer font-weight-bold text-white clearfix small z-1">
+                    <span class="float-left">Section: </span>
+                    <span class="float-right">{{badge.scout.section}}</span>
+                </div>
+                <div class="card-footer font-weight-bold text-white clearfix small z-1">
+                    <span class="float-left">Badge Name: </span>
+                    <span class="float-right">{{badge.badge.name}}</span>
+                </div>
+                <div class="card-footer font-weight-bold text-white clearfix small z-1">
+                    <span class="float-left">Badge Category: </span>
+                    <span class="float-right">{{badge.badge.category}}</span>
+                </div>
+                <div class="card-footer font-weight-bold text-white clearfix small z-1">
+                    <span class="float-left">Approve Badge: </span>
+                    <span class="float-right"><input name="approve_{{badge.id}}" type="checkbox"></span>
+                </div>
+                <div class="card-footer font-weight-bold text-white clearfix small z-1">
+                    <span class="float-left">Delete Badges: </span>
+                    <span class="float-right"><input name="delete_{{badge.id}}" type="checkbox"></span>
+                </div>
+
+
+
+            </div>
+        </div>
+        {% endfor %}
+
+
+    </div>
+</form>
+{% endblock %}

@@ -2,171 +2,189 @@
 <html lang="en">
 
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="">
-  <meta name="author" content="">
-  <title>Project Name</title>
-  {% load staticfiles %}
-  <!-- Bootstrap core CSS-->
-  <link href="{% static 'boyScouts/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
-  <link rel="stylesheet" href="{% static 'css/datepicker.css' %}">
-  <!-- Custom fonts for this template-->
-  <link href="{% static 'boyScouts/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
-  <!-- Custom styles for this template-->
-  <link href="{% static 'boyScouts/css/sb-admin.css' %}" rel="stylesheet">
-  <script src="{% static 'boyScouts/vendor/jquery/jquery.min.js' %}"></script>
-  <link href="{% static 'boyScouts/css/styles.css' %}" rel="stylesheet">
-  <script src="{% static 'boyScouts/js/jquery.min.js' %}"></script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Project Name</title>
+    {% load staticfiles %}
+    <!-- Bootstrap core CSS-->
+    <link href="{% static 'boyScouts/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/datepicker.css' %}">
+    <!-- Custom fonts for this template-->
+    <link href="{% static 'boyScouts/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
+    <!-- Custom styles for this template-->
+    <link href="{% static 'boyScouts/css/sb-admin.css' %}" rel="stylesheet">
+    <script src="{% static 'boyScouts/vendor/jquery/jquery.min.js' %}"></script>
+    <link href="{% static 'boyScouts/css/styles.css' %}" rel="stylesheet">
+    <script src="{% static 'boyScouts/js/jquery.min.js' %}"></script>
 </head>
 
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
-  <!-- Navigation-->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
-    <a class="navbar-brand" href="index.html">Project Name</a>
-    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive"
-      aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+    <!-- Navigation-->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
+        <a class="navbar-brand" href="index.html">Project Name</a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarResponsive">
-      <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
-        <li class="nav-item" data-toggle="tooltip" data-placement="right">
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
+                <li class="nav-item" data-toggle="tooltip" data-placement="right">
 
-          <a class="nav-link" href="{% url 'AdminApp:profile' %}">
-            <i class="fa fa-fw fa-user-circle-o"></i>
-            <span class="nav-link-text">Profile</span>
-          </a>
-        </li>
+                    <a class="nav-link" href="{% url 'AdminApp:profile' %}">
+                        <i class="fa fa-fw fa-user-circle-o"></i>
+                        <span class="nav-link-text">Profile</span>
+                    </a>
+                </li>
+               
+                <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Components">
+                    <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#approveBadges" data-parent="#exampleAccordion">
+                        <i class="fa fa-fw fa-info"></i>
+                        <span class="nav-link-text">Unapproved Badges</span>
+                    </a>
+                    <ul class="sidenav-second-level collapse" id="approveBadges">
+                        
+                        <li>
+                            <a href="{% url 'AdminApp:approveBadges' 'PB' %}">Proficiency Badges</a>
 
-        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Tables">
-          <a class="nav-link" id="admissionBtn" href="{% url 'AdminApp:admissionForm' %}">
-            <i class="fa fa-fw fa-user-plus"></i>
-            <span class="nav-link-text">Add Scout</span>
-          </a>
-        </li>
-        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Tables">
-          <a id='addBadgeBtn' class="nav-link" href="{% url 'AdminApp:addBadges' %}">
-            <i class="fa fa-fw fa-plus-square"></i>
-            <span class="nav-link-text">Add Badges</span>
-          </a>
-        </li>
-        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Components">
-          <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseComponents" data-parent="#exampleAccordion">
-            <i class="fa fa-fw fa-users"></i>
-            <span class="nav-link-text">View Scouts</span>
-          </a>
-          <ul class="sidenav-second-level collapse" id="collapseComponents">
-            {% for section in sections %}
-            <li>
-              <a href="{% url 'AdminApp:scoutList' section.id %}">{{section.name}}</a>
-             
-            </li>
-            
-            {% endfor %}
-          </ul>
+                        </li>
+                        <li>
+                            <a href="{% url 'AdminApp:approveBadges' 'RB' %}">Rank Badges</a>
 
-        </li>
+                        </li>
 
-        
-         
-          <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Menu Levels">
-              <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseMulti" data-parent="#exampleAccordion">
-                <i class="fa fa-fw fa-star"></i>
-                <span class="nav-link-text">View Badges</span>
-              </a>
-              <ul class="sidenav-second-level collapse" id="collapseMulti">
-                <li>
-                  <a class="nav-link-collapse collapsed" data-toggle="collapse" href="#collapseMulti2">Proficiency Badges</a>
-                  
-                  <ul class="sidenav-third-level collapse" id="collapseMulti2">
-                      {% for section in sections %}
-                      <li>
-                          <a href='{% url  'AdminApp:displayBadges' "PB" section.id %}'>{{section.name}}</a>
-                      </li>
-                      {% endfor %}
-                  </ul>
-                  <a class="nav-link-collapse collapsed" data-toggle="collapse" href="#collapseMulti3">Rank Badges</a>
-                  <ul class="sidenav-third-level collapse" id="collapseMulti3">
-                      {% for section in sections %}
-                      <li>
-                          <a href='{% url  'AdminApp:displayBadges' "RB" section.id %}'>{{section.name}}</a>
-                      </li>
-                      {% endfor %}
+                        
+                    </ul>
+
+                </li>
+
+
+                <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Tables">
+                    <a class="nav-link" id="admissionBtn" href="{% url 'AdminApp:admissionForm' %}">
+                        <i class="fa fa-fw fa-user-plus"></i>
+                        <span class="nav-link-text">Add Scout</span>
+                    </a>
+                </li>
+                <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Tables">
+                    <a id='addBadgeBtn' class="nav-link" href="{% url 'AdminApp:addBadges' %}">
+                        <i class="fa fa-fw fa-plus-square"></i>
+                        <span class="nav-link-text">Add Badges</span>
+                    </a>
+                </li>
+                <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Components">
+                    <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseComponents" data-parent="#exampleAccordion">
+                        <i class="fa fa-fw fa-users"></i>
+                        <span class="nav-link-text">View Scouts</span>
+                    </a>
+                    <ul class="sidenav-second-level collapse" id="collapseComponents">
+                        {% for section in sections %}
+                        <li>
+                            <a href="{% url 'AdminApp:scoutList' section.id %}">{{section.name}}</a>
+
+                        </li>
+
+                        {% endfor %}
+                    </ul>
+
+                </li>
+
+
+
+                <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Menu Levels">
+                    <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseMulti" data-parent="#exampleAccordion">
+                        <i class="fa fa-fw fa-star"></i>
+                        <span class="nav-link-text">View Badges</span>
+                    </a>
+                    <ul class="sidenav-second-level collapse" id="collapseMulti">
+                        <li>
+                            <a class="nav-link-collapse collapsed" data-toggle="collapse" href="#collapseMulti2">Proficiency Badges</a>
+
+                            <ul class="sidenav-third-level collapse" id="collapseMulti2">
+                                {% for section in sections %}
+                                <li>
+                                    <a href="{% url  'AdminApp:displayBadges' 'PB' section.id %}">{{section.name}}</a>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                            <a class="nav-link-collapse collapsed" data-toggle="collapse" href="#collapseMulti3">Rank Badges</a>
+                            <ul class="sidenav-third-level collapse" id="collapseMulti3">
+                                {% for section in sections %}
+                                <li>
+                                    <a href="{% url  'AdminApp:displayBadges' 'RB' section.id %}">{{section.name}}</a>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </li>
                     </ul>
                 </li>
-              </ul>
-            </li>
-
-        
 
 
-      </ul>
-      <ul class="navbar-nav ml-auto">
 
 
-        <li class="nav-item">
-          <a class="nav-link" data-toggle="modal" data-target="#exampleModal">
-            <i class="fa fa-fw fa-sign-out"></i>Logout</a>
-        </li>
-      </ul>
-    </div>
-  </nav>
-  <div class="content-wrapper">
-    <div id="mainContent" class="container-fluid">
-      <!-- Breadcrumbs-->
-      {% block mainContent %} {% endblock mainContent %}
+            </ul>
+            <ul class="navbar-nav ml-auto">
 
 
-    </div>
-    <!-- /.container-fluid-->
-    <!-- /.content-wrapper-->
-    <footer class="sticky-footer">
-      <div class="container">
-        <div class="text-center">
-          <small>Copyright © Your Website 2018</small>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="modal" data-target="#exampleModal">
+                        <i class="fa fa-fw fa-sign-out"></i>Logout</a>
+                </li>
+            </ul>
         </div>
-      </div>
-    </footer>
-    <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded" href="#page-top">
-      <i class="fa fa-angle-up"></i>
-    </a>
-    <!-- Logout Modal-->
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+    </nav>
+    <div class="content-wrapper">
+        <div id="mainContent" class="container-fluid">
+            <!-- Breadcrumbs-->
+            {% block mainContent %} {% endblock mainContent %}
+
+
+        </div>
+        <!-- /.container-fluid-->
+        <!-- /.content-wrapper-->
+        <footer class="sticky-footer">
+            <div class="container">
+                <div class="text-center">
+                    <small>Copyright © Your Website 2018</small>
+                </div>
+            </div>
+        </footer>
+        <!-- Scroll to Top Button-->
+        <a class="scroll-to-top rounded" href="#page-top">
+            <i class="fa fa-angle-up"></i>
+        </a>
+        <!-- Logout Modal-->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">×</span>
             </button>
-          </div>
-          <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-          <div class="modal-footer">
-            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-            <a class="btn btn-primary" href="{% url 'boyScouts:logoutView' %}">Logout</a>
-          </div>
+                    </div>
+                    <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                        <a class="btn btn-primary" href="{% url 'boyScouts:logoutView' %}">Logout</a>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
+        <!-- Bootstrap core JavaScript-->
+
+        <script src="{% static 'boyScouts/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+        <!-- Core plugin JavaScript-->
+        <script src="{% static 'boyScouts/vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+        <!-- Custom scripts for all pages-->
+        <script src="{% static 'boyScouts/js/sb-admin.min.js' %}"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
+
     </div>
-    <!-- Bootstrap core JavaScript-->
-    
-    <script src="{% static 'boyScouts/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-    <!-- Core plugin JavaScript-->
-    <script src="{% static 'boyScouts/vendor/jquery-easing/jquery.easing.min.js' %}"></script>
-    <!-- Custom scripts for all pages-->
-    <script src="{% static 'boyScouts/js/sb-admin.min.js' %}"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
-
-  </div>
-<script>
-
-
-</script>
-<script>
-  
-</script>
+    <script>
+    </script>
+    <script>
+    </script>
 </body>
 
 </html>

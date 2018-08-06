@@ -161,9 +161,10 @@ class ScoutFilterForm(forms.Form):
     id = forms.IntegerField(required=False,widget=forms.TextInput({'class' : 'form-control field ','placeholder':'ID',}))
 
     def getFilteredQuery(self,querySet):
-        group = self.data['group']
-        name = self.data['name']
-        id = self.data['id']
+        self.is_valid()
+        group = self.cleaned_data['group']
+        name = self.cleaned_data['name']
+        id = self.cleaned_data['id']
         print(group,name,id)
         
         if id:
@@ -173,3 +174,39 @@ class ScoutFilterForm(forms.Form):
         if group:
             querySet= querySet.filter(group_id=group)
         return querySet
+
+
+class approveBadgeFilterForm(forms.Form):
+    group = forms.ModelChoiceField(models.Group.objects.all(),required=False,label='Group',widget=forms.Select({'class' : 'form-control field ','placeholder':'group'}),empty_label="All")
+    section = forms.ModelChoiceField(models.Section.objects.all(),required=False,label='Section',widget=forms.Select({'class' : 'form-control field ','placeholder':'group'}),empty_label="All")
+    badge_name = forms.CharField(required=False,label='Badge Name',widget=forms.TextInput({'class' : 'form-control field ','placeholder':'Badge Name',}))
+    scout_name = forms.CharField(required=False,label='Scout Name',widget=forms.TextInput({'class' : 'form-control field ','placeholder':'Scout Name',}))
+    
+    badge_id = forms.IntegerField(required=False,label='Badge ID',widget=forms.TextInput({'class' : 'form-control field ','placeholder':'Badge ID',}))
+    scout_id = forms.IntegerField(required=False,label='Scout ID',widget=forms.TextInput({'class' : 'form-control field ','placeholder':'Scout ID',}))
+    
+
+    def getFilteredQuery(self,querySet):
+        self.is_valid()
+        group = self.cleaned_data['group']
+        section = self.cleaned_data['section']
+        badge_name = self.cleaned_data['badge_name']
+        scout_name = self.cleaned_data['scout_name']
+        scout_id = self.cleaned_data['scout_id']
+        badge_id = self.cleaned_data['badge_id']
+        print(group,section,badge_name,scout_name)
+        
+        if group:
+            querySet.filter(scout__group_id = group )
+        if section:
+            querySet= querySet.filter(badge__section_id=section)
+        if not badge_name=='':
+            querySet= querySet.filter(badge__name__icontains=badge_name)
+        if not scout_name == '':
+            querySet= querySet.filter(scout__name__icontains=scout_name)
+        if badge_id:
+            querySet= querySet.filter(badge__id=badge_id)
+        if scout_id:
+            querySet= querySet.filter(scout__id=scout_id)
+        return querySet
+
