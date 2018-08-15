@@ -11,6 +11,7 @@ gunicorn = "*"
 django-heroku = "*"
 pillow = "*"
 google-api-python-client = "*"
+oauth2client = "*"
 
 
 [requires]
