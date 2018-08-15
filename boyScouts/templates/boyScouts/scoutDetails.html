@@ -1,6 +1,24 @@
 {% extends 'boyScouts/blank.html' %} {% block mainContent %} {% load staticfiles %}
 <script src="{% static 'boyScouts/js/jquery.formset.js' %}"></script>
+<div class="modal fade" id="cnicModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <img class="text-center img-fluid" width="100%" src="{{instance.cnic}}" alt="">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 
+            </div>
+        </div>
+    </div>
+</div>
 <div class="container">
 
     {% csrf_token %}
@@ -11,30 +29,41 @@
         <div class="card-body">
             <div class="row">
                 <div class="text-center col-sm-12 col-md-6">
-                    {% if instance.image %}
-                    <img class="text-center img-fluid" src="{{instance.image.url}}" alt="" style="border-radius:100%; " width="50%"> {% else %}
+                    {% if instance.image != '' %}
+                    <img class="text-center img-fluid" src="{{instance.image}}" alt="" style="border-radius:100%; " width="50%"> {% else %}
                     <i class=" fa fa-5x  fa-user-circle" style="font-size:10rem"></i>
                     {% endif %}
+
+                    {% if instance.cnic %}
+                    <div>
+                        <a href="{{instance.cnic}}" data-toggle="modal" data-target="#cnicModal" class="btn bg-info text-white mt-3">View CNIC</a>
+                    </div>
+                    {% endif %}
                 </div>
+
                 <div class="col-sm-12 col-md-6">
-                    <h5 class="text-success">{{message}}</h5>
+                   
                     <h4>Name: {{instance.name}}</h4>
-                    <h4></h4>
                     <hr>
-                    <h4>Date of Birth:</h4>
-                    <h4>{{instance.dateOfBirth}}</h4>
+                    <h4>ID: {{instance.id}}</h4>
+                  
                     <hr>
-                    <h4>Joining Date:</h4>
-                    <h4>{{instance.dateOfJoining}}</h4>
+                    <h4>Date of Birth: {{instance.dateOfBirth}}</h4>
+                    
                     <hr>
-                    <h4>Education:</h4>
-                    <h4>{{instance.highestScoutEducation}}</h4>
+                    <h4>Joining Date: {{instance.dateOfJoining}}</h4>
+                    
                     <hr>
-                    <h4>Group:</h4>
-                    <h4>{{instance.group}}</h4>
+                    <h4>Education: {{instance.highestScoutingQualification}}</h4>
+                   
                     <hr>
-                    <h4>Section:</h4>
-                    <h4>{{instance.section}}</h4>
+                    <h4>Group: {{instance.group}}</h4>
+                   
+                    <hr>
+                    <h4>Section: {{instance.section}}</h4>
+                 
+
+
                 </div>
             </div>
 
@@ -42,6 +71,8 @@
 
 
     </div>
+
+
     <div class=" card mt-3">
 
         <div class="card-header">

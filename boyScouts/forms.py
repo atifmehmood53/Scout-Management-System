@@ -22,18 +22,20 @@ class admissionForm(forms.Form):
     # Badge Details 
     
 class Scout_Form(forms.ModelForm):
+    image = forms.ImageField(widget=forms.FileInput({'class' : 'form-control field ',}),required=False)
+    cnic = forms.ImageField(widget=forms.FileInput({'class' : 'form-control field ',}),required=False)
+
     def __init__(self,userGroup, *args, **kwargs):
         super().__init__(*args,**kwargs)
+        
         if userGroup != 'superuser':
             self.fields['group'].initial = userGroup.group.id
             self.fields['group'].disabled = True
             self.fields['section'].initial = userGroup.section.id
             self.fields['section'].disabled = True
-       
-
     class Meta:
         model = models.Scout
-        fields = '__all__'
+        fields = ['group','section','name','dateOfBirth','dateOfJoining','highestScoutingQualification',]
         widgets ={
             'group':forms.Select({'class' : 'form-control field ',}),
             'section':forms.Select({'class' : 'form-control field ',}),
@@ -41,8 +43,9 @@ class Scout_Form(forms.ModelForm):
             'dateOfBirth' :  forms.DateInput({'class' : 'form-control field date','placeholder':'yyyy-mm-dd','data-toggle':"datepicker"}),
             'dateOfJoining' :  forms.DateInput({'class' : 'form-control field date','placeholder':'yyyy-mm-dd','data-toggle':"datepicker"}),
             'highestScoutingQualification' : forms.TextInput({'class' : 'form-control field ','placeholder':'Qualification'}),
-            'image' : forms.FileInput({'class' : 'form-control field ',}),
+            #'image' : forms.FileInput({'class' : 'form-control field ',}),
         }
+     
 
 
 class Scout_Rank_Badge_FormAdmin(forms.ModelForm):
@@ -210,3 +213,7 @@ class approveBadgeFilterForm(forms.Form):
             querySet= querySet.filter(scout__id=scout_id)
         return querySet
 
+
+
+class fileForm(forms.Form):
+    file = forms.FileField()

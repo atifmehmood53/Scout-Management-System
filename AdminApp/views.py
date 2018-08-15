@@ -13,7 +13,7 @@ from boyScouts import models
 from boyScouts import forms
 
 from boyScouts.helpers import  *
-
+from  .test import * 
         
 
 
@@ -60,11 +60,14 @@ def scoutDetails(request,id):
     if request.method == 'POST':
         scoutForm = forms.Scout_Form('superuser',request.POST,instance=instance) 
         if scoutForm.is_valid():
-            scoutForm.save()
-            message = "Updated successfully."
-    
-    
-    print(getScoutBadgePlaneList(instance,'RB'),getScoutBadgePlaneList(instance,'PB'))
+            Scout = scoutForm.save()
+            try:
+                scoutFiles(request,Scout)
+                print('called')
+                message = "Updated successfully."
+                scoutForm.save()
+            except:
+                message = 'an error occured while uploading files.'
     return  render(request,'AdminApp/scoutDetails.html',context={'sections':getSections('superuser'),'instance':instance,'scoutForm':scoutForm,'rankBadges':rankBadges,'proficiencyBadges':proficiencyBadges,'message':message})
     
 
@@ -72,20 +75,25 @@ def scoutDetails(request,id):
 
 @login_required(login_url='/login')
 def admission(request):
+    if not request.user.is_superuser :
+        return HttpResponse("You Don't have any assigned group, please contact your admin.")
+ 
     print(request.POST)
     if not request.user.is_superuser :
         return HttpResponse("You Don't have any assigned group, please contact your admin.")
     admissionForm = forms.Scout_Form('superuser')
     if request.method == 'POST':
         # admissionForm
-        print(request.POST)
         admissionForm = forms.Scout_Form('superuser',request.POST)
-        print(admissionForm.data)
-
         if admissionForm.is_valid() :
-            newScout = admissionForm.save()
+            newScout = admissionForm.save(commit=False)#not save to database
             admissionForm = forms.Scout_Form('superuser')
             #return redirect(reverse('AdminApp:editScoutBadges',args=[newScout.id]))
+            try:
+                scoutFiles(request,newScout)
+            except:
+                return render(request,'AdminApp/admissionForm.html',context={'sections':getSections('superuser'),'admissionForm':admissionForm,'error':'an error occured while uploading files'})
+            newScout.save()
             return render(request,'AdminApp/admissionForm.html',context={'sections':getSections('superuser'),'admissionForm':admissionForm,'message':reverse('AdminApp:editScoutBadges',args=[newScout.id])})
 
     return  render(request,'AdminApp/admissionForm.html',context={'sections':getSections('superuser'),'admissionForm':admissionForm})
@@ -209,3 +217,21 @@ def approveBadges(request, badge_category):
     context['badges'] = querySet
 
     return render(request,'AdminApp/approveBadges.html',context=context)
+
+
+
+
+#drive test
+
+def driveTest(request):
+    form = forms.fileForm()
+    #print(service.files().list().execute())
+    print(service.files().list(pageSize=10, fields="nextPageToken, files(id, name, webContentLink)").execute())
+    if request.method == 'POST':
+        media = MediaInMemoryUpload(request.FILES['file'].read())
+        object = service.files().create(body={'name': 'photo.jpg'},
+                                    media_body=media,
+                                    fields='id, webContentLink',).execute()
+        print("Object url",object['webContentLink'])
+        
+    return render(request,'driveTest.html',context={'form':form})

@@ -19,9 +19,15 @@
         <div class="card-body">
             <div class="row">
                 <div class="text-center col-sm-12 col-md-6">
-                    {% if instance.image %}
-                    <img class="text-center img-fluid" src="{{instance.image.url}}" alt="" style="border-radius:100%; " width="50%"> {% else %}
+                    {% if instance.image != '' %}
+                    <img class="text-center img-fluid" src="{{instance.image}}" alt="" style="border-radius:100%; " width="50%"> {% else %}
                     <i class=" fa fa-5x  fa-user-circle" style="font-size:10rem"></i>
+                    {% endif %}
+
+                    {% if instance.cnic %}
+                    <div>
+                        <a href="{{instance.cnic}}" data-toggle="modal" data-target="#exampleModal" class="btn bg-info text-white mt-3">View CNIC</a>
+                    </div>
                     {% endif %}
                 </div>
                 <div class="col-sm-12 col-md-6">
@@ -42,6 +48,7 @@
                     <hr>
                     <h4>Section: {{instance.section}}</h4>
                     <h4></h4>
+                    <a class="btn btn-block btn-primary"  href="{% url 'AdminApp:scoutDetails' instance.id %}">Edit Bio</a>
                 </div>
             </div>
 

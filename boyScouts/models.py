@@ -60,7 +60,11 @@ class Scout(models.Model):
     dateOfJoining = models.DateField(verbose_name="Joining Date")
     
     highestScoutingQualification = models.CharField(max_length=50,verbose_name="Highest Scout Qualification")
-    image = models.ImageField(blank=True, null=True)
+    image = models.CharField(max_length=2000,blank=True)
+    cnic = models.CharField(max_length=2000,blank=True)
+    imageId = models.CharField(max_length=2000,blank=True)
+    cnicId = models.CharField(max_length=2000,blank=True)
+    
     def __str__(self):
         return self.name
 

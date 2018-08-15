@@ -1,7 +1,60 @@
 from . import models
 from . import forms
 from django.forms import formset_factory, inlineformset_factory
+from AdminApp.test import * 
 
+#saves files
+def scoutFiles(request,newScout):
+    image = request.FILES.get('image')
+    cnic = request.FILES.get('cnic')
+    print(image,cnic)
+    try:
+        if image:
+            image = image.read()
+            oldImage = newScout.imageId
+            Imagemedia = MediaInMemoryUpload(image)
+            
+            image = service.files().create(body={'name': newScout.name+' '+newScout.group.name,'parents': ['1VlH9g74D_Mw0tot53hDjOsXOsbwOhR_r']},
+                                    media_body=Imagemedia,
+                                    fields='id, webContentLink',).execute()
+            
+            try:
+                if oldImage != None and oldImage != '':
+                   service.files().delete(fileId=oldImage).execute()
+            except:
+                raise FileNotFoundError
+
+
+            newScout.imageId = image['id']
+            newScout.image = image['webContentLink']
+                
+                    
+        if cnic: 
+            oldCnic = newScout.cnicId
+            print(oldCnic,"$$"*50)
+            cnic = cnic.read()
+            
+            Cnicmedia = MediaInMemoryUpload(cnic)
+            
+            cnic = service.files().create(body={'name': newScout.name+' '+newScout.group.name,'parents': ['1VlH9g74D_Mw0tot53hDjOsXOsbwOhR_r']},
+                                    media_body=Cnicmedia,
+                                    fields='id, webContentLink',).execute()
+
+            print(oldCnic,"$$"*50)
+            try:
+                if oldCnic != None and oldCnic != '':
+                   service.files().delete(fileId=oldCnic).execute()
+            except:
+                raise FileNotFoundError
+            newScout.cnicId = cnic['id']
+            newScout.cnic = cnic['webContentLink']
+    except:
+        raise OSError
+
+
+
+    
+    
 
 def getScoutBadgePlaneList(instance,category):
     lst = []

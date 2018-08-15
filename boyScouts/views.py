@@ -91,10 +91,23 @@ def admission(request):
         admissionForm = forms.Scout_Form(userGroup,request.POST)
         print(admissionForm.data)
         if admissionForm.is_valid() :
-            newScout = admissionForm.save()
+            #newScout = admissionForm.save()
+            #admissionForm = forms.Scout_Form(userGroup)
+            #scoutFiles(request,newScout)
+            
+            newScout = admissionForm.save(commit=False)#not save to database
+            admissionForm = forms.Scout_Form('superuser')
+            #return redirect(reverse('AdminApp:editScoutBadges',args=[newScout.id]))
+            try:
+                scoutFiles(request,newScout)
+            except:
+                return render(request,'boyScouts/admissionForm.html',context={'sections':getSections(userGroup),'admissionForm':admissionForm,'error':'an error occured while uploading files'})
+            newScout.save()
             admissionForm = forms.Scout_Form(userGroup)
-            return  redirect(reverse('boyScouts:editScoutBadges',args=[newScout.id]))
-            return render(request,'boyScouts/admissionForm.html',context={'sections':getSections(userGroup),'admissionForm':admissionForm})
+            return render(request,'boyScouts/admissionForm.html',context={'sections':getSections('superuser'),'admissionForm':admissionForm,'message':reverse('boyScouts:editScoutBadges',args=[newScout.id])})
+
+            #return  redirect(reverse('boyScouts:editScoutBadges',args=[newScout.id]))
+            #return render(request,'boyScouts/admissionForm.html',context={'sections':getSections(userGroup),'admissionForm':admissionForm})
 
     
     
