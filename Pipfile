@@ -10,6 +10,7 @@ django = "*"
 gunicorn = "*"
 django-heroku = "*"
 pillow = "*"
+google-api-python-client = "*"
 
 
 [requires]
