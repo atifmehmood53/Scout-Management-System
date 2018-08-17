@@ -6,8 +6,8 @@
 
 </ol>
 
-<form method="POST">
-    {% csrf_token %}
+<form method="GET">
+    
     <hr>
     <div class="row">
         {% for field in filter %}
@@ -22,48 +22,73 @@
     </div>
 
     <hr>
+    <button name="deleteSelected" class="btn btn-small ">Delete Selected</button>
+    <hr />
 
 
-</form>
+    <div class="row mt-2">
+        {% for scout in scoutList %}
 
-<div class="row mt-2">
-    {% for scout in scoutList %}
+        <div class="col-xl-3 col-sm-6 mb-3">
+            <div class="card text-white bg-dark o-hidden h-100">
+                <div class="card-body">
+                    <h4 class="font-weight-bold float-left">{{scout.name}}</h4>
+                    <div class="float-right">
+                        {% if scout.image != '' %}
+                        <img src="{{scout.image}}" alt="" style="border-radius:100%" width="100" height="100"> {% else %}
+                        <i class=" fa fa-4x  fa-user-circle"></i> {% endif %}
 
-    <div class="col-xl-3 col-sm-6 mb-3">
-        <div class="card text-white bg-dark o-hidden h-100">
-            <div class="card-body">
-                <h4 class="font-weight-bold float-left">{{scout.name}}</h4>
-                <div class="float-right">
-                    {% if scout.image != '' %}
-                    <img src="{{scout.image}}" alt="" style="border-radius:100%" width="100" height="100"> {% else %}
-                    <i class=" fa fa-4x  fa-user-circle"></i> {% endif %}
+                    </div>
 
                 </div>
-
-            </div>
-            <div class="card-footer text-white clearfix small z-1">
-                <span class="float-left">Group: </span>
-                <span class="float-right">{{scout.group}}</span>
-            </div>
-            <div class="card-footer text-white clearfix small z-1">
-                <span class="float-left">Rank Badges</span>
-                <span class="float-right">{{scout.number_of_rank}}</span>
-            </div>
-            <div class="card-footer text-white clearfix small z-1">
-                <span class="float-left">Proficiency Badges</span>
-                <span class="float-right">{{scout.number_of_proficiency}}</span>
-            </div>
-            <a class="card-footer text-white clearfix small z-1" href="{% url 'AdminApp:scoutDetails' scout.id %}">
-                <span class="float-left">View Details</span>
-                <span class="float-right">
+                <div class="card-footer text-white clearfix small z-1">
+                    <span class="float-left">Group: </span>
+                    <span class="float-right">{{scout.group}}</span>
+                </div>
+                <div class="card-footer text-white clearfix small z-1">
+                    <span class="float-left">Rank Badges</span>
+                    <span class="float-right">{{scout.number_of_rank}}</span>
+                </div>
+                <div class="card-footer text-white clearfix small z-1">
+                    <span class="float-left">Proficiency Badges</span>
+                    <span class="float-right">{{scout.number_of_proficiency}}</span>
+                </div>
+                <div class="card-footer font-weight-bold text-white clearfix small z-1">
+                    <span class="float-left">Delete Scout: </span>
+                    <span class="float-right"><input name="delete_{{scout.id}}" type="checkbox"></span>
+                </div>
+                <a class="card-footer text-white clearfix small z-1" href="{% url 'AdminApp:scoutDetails' scout.id %}">
+                    <span class="float-left">View Details</span>
+                    <span class="float-right">
                         <i class="fa fa-angle-right"></i>
                     </span>
-            </a>
+                </a>
 
+            </div>
         </div>
+        {% endfor %}
+
+
+
     </div>
-    {% endfor %}
+    <hr />
+    <div class="pagination">
+        <span class="step-links">
+            {% if scoutList.has_previous %}
+            <button name="page" class="btn btn-small mt-1" value="1" href="?page=1">&laquo; first</button>
+            <button name="page" class="btn btn-small mt-1" value="{{ scoutList.previous_page_number }}" href="?page={{ scoutList.previous_page_number }}">previous</button>
+            {% endif %}
 
-</div>
+            <span class="current">
+                Page {{ scoutList.number }} of {{ scoutList.paginator.num_pages }}.
+            </span>
 
+            {% if scoutList.has_next %}
+            <button name="page" class="btn btn-small mt-1" value="{{ scoutList.next_page_number }}" href="?page={{ scoutList.next_page_number }}">next</button>
+            <button name="page" class="btn btn-small mt-1" value="{{ scoutList.paginator.num_pages }}" href="?page={{ scoutList.paginator.num_pages }}">last &raquo;</button>
+            {% endif %}
+        </span>
+    </div>
+
+</form>
 {% endblock mainContent %}

@@ -2,6 +2,7 @@
 
 from django.shortcuts import render
 from django.shortcuts import HttpResponse , reverse , redirect, get_object_or_404
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.forms import formset_factory, inlineformset_factory
 from django.contrib.auth import authenticate, login, logout 
 from django.contrib.auth.decorators import login_required
@@ -31,15 +32,30 @@ def profile(request):
 def scoutsList(request,id):
     if not request.user.is_superuser :
         return HttpResponse("You Don't have any assigned group, please contact your admin.")
-    filter = forms.ScoutFilterForm()
+    #filter = forms.ScoutFilterForm()
     scouts = models.Scout.objects.all().filter(section_id = id)
-    if request.method == 'POST':
-        filter = forms.ScoutFilterForm(request.POST)
-        scouts = filter.getFilteredQuery(scouts)
-    
-        
+    #if request.method == 'POST':
+    #    filter = forms.ScoutFilterForm(request.POST)
+    #    scouts = filter.getFilteredQuery(scouts)
+
+    #deletion logic --------x
+    if 'deleteSelected' in request.GET:
+        dict = []
+        for key in request.GET:
+            if key.__contains__('delete_'):
+                dict.append(int(key.split('_')[1]))
+        print(dict)
+        models.Scout.objects.filter(pk__in=dict).delete()
+    #end deletion logic -----x 
+
+    filter = forms.ScoutFilterForm(request.GET)
+    scouts = filter.getFilteredQuery(scouts)
     
     scouts = scouts.annotate(number_of_rank=Count('scout_rank_badge',distinct=True)).annotate(number_of_proficiency=Count('scout_proficiency_badge',distinct=True))
+    #pagination 
+    paginator = Paginator(scouts, 1)
+    page = request.GET.get('page')
+    scouts = paginator.get_page(page)
     return  render(request,'AdminApp/scoutList.html', context={'scoutList':scouts,'sections':getSections('superuser'),'category':models.Section.objects.get(id = id),'filter':filter})
 
 
