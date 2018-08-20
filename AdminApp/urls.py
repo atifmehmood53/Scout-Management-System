@@ -28,7 +28,7 @@ urlpatterns = [
     path('addBadges',views.addBadges,name='addBadges'),
     path('badges/<slug:category>/<int:section_id>',views.displayBadges,name='displayBadges'),
     path('approveBadges/<slug:badge_category>',views.approveBadges,name='approveBadges'),
-    path('test/',views.driveTest,name='test'),
+    #path('test/',views.driveTest,name='test'),
    
     
 ]

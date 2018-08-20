@@ -4,7 +4,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <h5 class="modal-title" id="exampleModalLabel">CINC</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -84,8 +84,8 @@
             <h3>Existing Rank Badges Earned</h3>
         </div>
         <div class="card-body">
-            <table class="table table-light table-responsive">
-                <thead class="thead-dark">
+            <table class="table table-light table-responsive-sm">
+                <thead class="thead-dark ">
                     <tr>
                         <th scope="col">Badge Name</th>
                         <th scope="col">Passing Date</th>
@@ -104,12 +104,15 @@
                     {% if badges|length == 0 %}
                     <tr>
                         <td>No badges.</td>
+                        <td></td>
+                        <td></td>
+                       
                     </tr>
                     {% else %} {% for badge in badges %}
                     <tr>
-                        <td class=" col-6">{{badge.badge.name}}</td>
-                        <td class=" col-6"> {{badge.dateOfPassing}}</td>
-                        <td class=" col-6"> {{badge.is_approved}}</td>
+                        <td class=" ">{{badge.badge.name}}</td>
+                        <td class=" "> {{badge.dateOfPassing}}</td>
+                        <td class=" "> {{badge.is_approved}}</td>
                     </tr>
                     {% endfor %} {% endif %} {% endfor %}
                 </tbody>

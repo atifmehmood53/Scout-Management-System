@@ -1,11 +1,20 @@
 from django import forms 
 from . import models
-
+from django.contrib.auth import models as djangoModels
 
 class Login_Form(forms.Form):
     username = forms.CharField(widget=forms.TextInput(attrs={'class' : 'form-control'}),label='ID')
     password = forms.CharField(widget=forms.PasswordInput(attrs={'class' : 'form-control'}),label='Password')
     
+
+
+
+class userForm(forms.ModelForm):
+    class Meta:
+        model = djangoModels.User
+        fields = '__all__'
+
+
 
 class admissionForm(forms.Form):
     name = forms.CharField(max_length=50,label='Name')

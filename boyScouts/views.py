@@ -4,6 +4,7 @@ from django.forms import formset_factory, inlineformset_factory
 from django.contrib.auth import authenticate, login, logout 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db.models import Count
 
 from . import models
@@ -56,6 +57,14 @@ def scoutsList(request,id):
     else:
         scouts = models.Scout.objects.all().filter(section_id = id, group= userGroup.group )
     scouts = scouts.annotate(number_of_rank=Count('scout_rank_badge',distinct=True)).annotate(number_of_proficiency=Count('scout_proficiency_badge',distinct=True))
+    
+    
+    
+    #pagination 
+    paginator = Paginator(scouts, 25)
+    page = request.GET.get('page')
+    scouts = paginator.get_page(page)
+    
     return  render(request,'boyScouts/scoutList.html', context={'scoutList':scouts,'sections':getSections(userGroup),'category':models.Section.objects.get(id = id)})
 
 

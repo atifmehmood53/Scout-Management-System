@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Project Name</title>
+    <title>Scouts Management System</title>
     {% load staticfiles %}
     <!-- Bootstrap core CSS-->
     <link href="{% static 'boyScouts/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
@@ -24,40 +24,19 @@
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
     <!-- Navigation-->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
-        <a class="navbar-brand" href="index.html">Project Name</a>
+        <a class="navbar-brand" href="index.html">Scouts Management System</a>
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
                 <li class="nav-item" data-toggle="tooltip" data-placement="right">
-
                     <a class="nav-link" href="{% url 'AdminApp:profile' %}">
                         <i class="fa fa-fw fa-user-circle-o"></i>
                         <span class="nav-link-text">Profile</span>
                     </a>
                 </li>
-               
-                <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Components">
-                    <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#approveBadges" data-parent="#exampleAccordion">
-                        <i class="fa fa-fw fa-info"></i>
-                        <span class="nav-link-text">Unapproved Badges</span>
-                    </a>
-                    <ul class="sidenav-second-level collapse" id="approveBadges">
-                        
-                        <li>
-                            <a href="{% url 'AdminApp:approveBadges' 'PB' %}">Proficiency Badges</a>
 
-                        </li>
-                        <li>
-                            <a href="{% url 'AdminApp:approveBadges' 'RB' %}">Rank Badges</a>
-
-                        </li>
-
-                        
-                    </ul>
-
-                </li>
 
 
                 <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Tables">
@@ -81,15 +60,10 @@
                         {% for section in sections %}
                         <li>
                             <a href="{% url 'AdminApp:scoutList' section.id %}">{{section.name}}</a>
-
                         </li>
-
                         {% endfor %}
                     </ul>
-
                 </li>
-
-
 
                 <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Menu Levels">
                     <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseMulti" data-parent="#exampleAccordion">
@@ -99,7 +73,6 @@
                     <ul class="sidenav-second-level collapse" id="collapseMulti">
                         <li>
                             <a class="nav-link-collapse collapsed" data-toggle="collapse" href="#collapseMulti2">Proficiency Badges</a>
-
                             <ul class="sidenav-third-level collapse" id="collapseMulti2">
                                 {% for section in sections %}
                                 <li>
@@ -118,10 +91,22 @@
                         </li>
                     </ul>
                 </li>
+                <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Components">
+                    <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#approveBadges" data-parent="#exampleAccordion">
+                        <i class="fa fa-fw fa-info"></i>
+                        <span class="nav-link-text">Unapproved Badges</span>
+                    </a>
+                    <ul class="sidenav-second-level collapse" id="approveBadges">
 
+                        <li>
+                            <a href="{% url 'AdminApp:approveBadges' 'PB' %}">Proficiency Badges</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'AdminApp:approveBadges' 'RB' %}">Rank Badges</a>
+                        </li>
 
-
-
+                    </ul>
+                </li>
             </ul>
             <ul class="navbar-nav ml-auto">
 

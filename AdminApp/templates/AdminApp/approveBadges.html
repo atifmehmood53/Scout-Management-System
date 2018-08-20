@@ -6,8 +6,8 @@
     </li>
 
 </ol>
-<form method="POST">
-    {% csrf_token %}
+<form method="GET">
+
     <hr>
     <div class="row">
         {% for field in filter %}
@@ -20,13 +20,10 @@
     <div class="container">
         <button class=" mt-2 btn btn-block btn-small btn-primary text-center"><li class=" fa fa-filter"></li></button>
     </div>
-</form>
 
 
-<form action="" method="POST">
-    {% csrf_token %}
     <hr> {% if badges|length > 0 %}
-    <button class=" btn btn-success">Update</button>
+    <button name="update" class=" btn btn-success">Update</button>
     <hr> {% endif %}
 
 
@@ -35,13 +32,14 @@
         <div class="col-xl-3 col-sm-6 mb-3">
             <div class="card text-white bg-info o-hidden h-100">
                 <div class="card-body">
-                    <h4 class="font-weight-bold float-left">{{badge.scout.name}}</h4>
-                    <div class="float-right">
-                        {% if scout.image != '' %}
-                        <img src="{{badge.scout.image}}" alt="" style="border-radius:100%" width="100" height="100"> {% else %}
-                        <i class=" fa fa-4x  fa-user-circle"></i> {% endif %}
-                    </div>
-
+                    <a href="{% url 'AdminApp:scoutDetails' badge.scout.id %}" class="text-white">
+                        <h4 class="font-weight-bold float-left">{{badge.scout.name}}</h4>
+                        <div class="float-right">
+                            {% if scout.image != '' %}
+                            <img src="{{badge.scout.image}}" alt="" style="border-radius:100%" width="100" height="100"> {% else %}
+                            <i class=" fa fa-4x  fa-user-circle"></i> {% endif %}
+                        </div>
+                    </a>
                 </div>
                 <div class="card-footer text-white font-weight-bold clearfix small z-1">
                     <span class="float-left">Group: </span>
@@ -76,5 +74,25 @@
 
 
     </div>
+
+    <hr />
+    <div class="pagination">
+        <span class="step-links">
+            {% if badges.has_previous %}
+            <button name="page" class="btn btn-small mt-1" value="1" href="?page=1">&laquo; first</button>
+            <button name="page" class="btn btn-small mt-1" value="{{ badges.previous_page_number }}" href="?page={{ badges.previous_page_number }}">previous</button>
+            {% endif %}
+
+            <span class="current">
+                Page {{ badges.number }} of {{ badges.paginator.num_pages }}.
+            </span>
+
+            {% if badges.has_next %}
+            <button name="page" class="btn btn-small mt-1" value="{{ badges.next_page_number }}" href="?page={{ badges.next_page_number }}">next</button>
+            <button name="page" class="btn btn-small mt-1" value="{{ badges.paginator.num_pages }}" href="?page={{ badges.paginator.num_pages }}">last &raquo;</button>
+            {% endif %}
+        </span>
+    </div>
+    <hr />
 </form>
 {% endblock %}

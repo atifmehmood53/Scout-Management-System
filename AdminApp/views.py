@@ -14,7 +14,7 @@ from boyScouts import models
 from boyScouts import forms
 
 from boyScouts.helpers import  *
-from  .test import * 
+#from  .test import * 
         
 
 
@@ -170,6 +170,28 @@ def displayBadges(request,category,section_id):
 
     errorslist = []
     
+
+
+
+    #deletion logic --------x
+    if 'deleteSelected' in request.GET:
+        dict = []
+        for key in request.GET:
+            if key.__contains__('delete_'):
+                dict.append(int(key.split('_')[1]))
+        print(dict)
+        for badge in dict:
+            instance = models.Badge.objects.get(id=int(badge))
+            print(instance)
+            try:
+                instance.delete()
+            except:
+                errorslist.append(instance.name)
+        #models.Badge.objects.filter(pk__in=dict).delete()
+    #end deletion logic -----x 
+
+
+    """
     if request.method == 'POST':
         print(request.method)
         dict = request.POST.copy()
@@ -182,6 +204,8 @@ def displayBadges(request,category,section_id):
                 instance.delete()
             except:
                 errorslist.append(instance.name)
+    """
+
     context['errorslist'] = errorslist
     badges = None
     queryset = models.Badge.objects.filter(section = section_id)
@@ -190,7 +214,10 @@ def displayBadges(request,category,section_id):
         
     elif category == 'RB':
         queryset = queryset.filter(category='RB')
-
+    #pagintor
+    paginator = Paginator(queryset, 1)
+    page = request.GET.get('page')
+    queryset = paginator.get_page(page)
     context['badges']= queryset
     return render(request,'AdminApp/displayBadges.html',context=context)
 
@@ -199,36 +226,63 @@ def displayBadges(request,category,section_id):
 @login_required(login_url='/login')
 def approveBadges(request, badge_category):
     context={'sections':getSections('superuser')}
-    filter = forms.approveBadgeFilterForm()
+    #filter = forms.approveBadgeFilterForm()
     if badge_category == 'RB':
         querySet = models.Scout_Rank_Badge.objects.filter(badge__approval_required=True,is_approved= False)
     elif badge_category == 'PB':
         querySet = models.Scout_Proficiency_Badge.objects.filter(badge__approval_required=True,is_approved= False)
+    #appling filters
+    filter = forms.approveBadgeFilterForm(request.GET)
+    querySet = filter.getFilteredQuery(querySet)
 
-    
-    if request.method == 'POST':
-        filter = forms.approveBadgeFilterForm(request.POST)
-        querySet = filter.getFilteredQuery( querySet)
-        print(request.POST)
-        dict = request.POST.copy()
-        del dict['csrfmiddlewaretoken']
-        print(dict)
-        for i in dict:
-            instance = i.split('_')
-            if badge_category == 'RB':
-                if instance[0]=='delete':
-                    models.Scout_Rank_Badge.objects.filter(id=str(instance[1])).delete()
-                elif instance[0]=='approve':
-                    models.Scout_Rank_Badge.objects.filter(id=str(instance[1])).update(is_approved= True)
-            elif badge_category == 'PB':
-                if instance[0]=='delete':
-                    models.Scout_Proficiency_Badge.objects.filter(id=str(instance[1])).delete()
-                if instance[0]=='approve':
-                    models.Scout_Proficiency_Badge.objects.filter(id=str(instance[1])).update(is_approved= True)
-            
+    if 'update' in request.GET:
+        #print(request.GET)
+        delete = []
+        approve = []
+        for key in request.GET:
+            if key.__contains__('delete_'):
+                delete.append(int(key.split('_')[1]))
+            elif key.__contains__('approve_'):
+                approve.append(int(key.split('_')[1]))
+        if badge_category == 'RB':
+            models.Scout_Rank_Badge.objects.filter(pk__in=delete).delete()
+            models.Scout_Rank_Badge.objects.filter(pk__in=approve).update(is_approved= True)
+        elif badge_category == 'PB':
+             models.Scout_Proficiency_Badge.objects.filter(pk__in=delete).delete()
+             models.Scout_Proficiency_Badge.objects.filter(pk__in=approve).update(is_approved= True)
+        print(
+            "Approve:", approve,
+            "Delete" , delete,
+            )
+        
+
+    """
+        if request.method == 'POST':
+            filter = forms.approveBadgeFilterForm(request.POST)
+            querySet = filter.getFilteredQuery( querySet)
+            print(request.POST)
+            dict = request.POST.copy()
+            del dict['csrfmiddlewaretoken']
+            print(dict)
+            for i in dict:
+                instance = i.split('_')
+                if badge_category == 'RB':
+                    if instance[0]=='delete':
+                        models.Scout_Rank_Badge.objects.filter(id=str(instance[1])).delete()
+                    elif instance[0]=='approve':
+                        models.Scout_Rank_Badge.objects.filter(id=str(instance[1])).update(is_approved= True)
+                elif badge_category == 'PB':
+                    if instance[0]=='delete':
+                        models.Scout_Proficiency_Badge.objects.filter(id=str(instance[1])).delete()
+                    if instance[0]=='approve':
+                        models.Scout_Proficiency_Badge.objects.filter(id=str(instance[1])).update(is_approved= True)
+         print('ok') 
+     """     
 
 
-    
+    paginator = Paginator(querySet, 1)
+    page = request.GET.get('page')
+    querySet = paginator.get_page(page)
     context['filter'] = filter
     context['badges'] = querySet
 

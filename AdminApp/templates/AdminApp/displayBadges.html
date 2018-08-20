@@ -21,10 +21,10 @@
         </button>
 </div>
 {% endif %}
-<form method="POST">
-    {% csrf_token %}
+<form method="GET">
+    
     <hr>
-    <button class="btn btn-sm" type="submit">Delete Selected</button>
+    <button name="deleteSelected" class="btn btn-sm" type="submit">Delete Selected</button>
     <hr>
 
 
@@ -61,7 +61,7 @@
                 <div class="card-footer text-white clearfix small z-1">
                     <span class="float-left">Check if you want to delete: </span>
                     <span class="float-right">
-                        <input type="checkbox" name="{{badge.id}}">
+                        <input type="checkbox" name="delete_{{badge.id}}">
                     </span>
                 </div>
                 <a class="card-footer text-white clearfix small z-1" href="#">
@@ -77,6 +77,24 @@
 
         {% endfor %}
 
+    </div>
+    <hr />
+    <div class="pagination">
+        <span class="step-links">
+            {% if badges.has_previous %}
+            <button name="page" class="btn btn-small mt-1" value="1" href="?page=1">&laquo; first</button>
+            <button name="page" class="btn btn-small mt-1" value="{{ badges.previous_page_number }}" href="?page={{ badges.previous_page_number }}">previous</button>
+            {% endif %}
+
+            <span class="current">
+                Page {{ badges.number }} of {{ badges.paginator.num_pages }}.
+            </span>
+
+            {% if badges.has_next %}
+            <button name="page" class="btn btn-small mt-1" value="{{ badges.next_page_number }}" href="?page={{ badges.next_page_number }}">next</button>
+            <button name="page" class="btn btn-small mt-1" value="{{ badges.paginator.num_pages }}" href="?page={{ badges.paginator.num_pages }}">last &raquo;</button>
+            {% endif %}
+        </span>
     </div>
 </form>
 
