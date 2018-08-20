@@ -53,7 +53,7 @@ def scoutsList(request,id):
     
     scouts = scouts.annotate(number_of_rank=Count('scout_rank_badge',distinct=True)).annotate(number_of_proficiency=Count('scout_proficiency_badge',distinct=True))
     #pagination 
-    paginator = Paginator(scouts, 1)
+    paginator = Paginator(scouts, 25)
     page = request.GET.get('page')
     scouts = paginator.get_page(page)
     return  render(request,'AdminApp/scoutList.html', context={'scoutList':scouts,'sections':getSections('superuser'),'category':models.Section.objects.get(id = id),'filter':filter})
@@ -215,7 +215,7 @@ def displayBadges(request,category,section_id):
     elif category == 'RB':
         queryset = queryset.filter(category='RB')
     #pagintor
-    paginator = Paginator(queryset, 1)
+    paginator = Paginator(queryset, 25)
     page = request.GET.get('page')
     queryset = paginator.get_page(page)
     context['badges']= queryset
@@ -280,7 +280,7 @@ def approveBadges(request, badge_category):
      """     
 
 
-    paginator = Paginator(querySet, 1)
+    paginator = Paginator(querySet, 25)
     page = request.GET.get('page')
     querySet = paginator.get_page(page)
     context['filter'] = filter
